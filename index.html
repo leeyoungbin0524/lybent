@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LYBENTERTAINMENT</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html">
+      <img src="LYB_logo.png" alt="LYB Logo" class="brand-logo" />
+    </a>
+
+    <nav class="nav" id="nav">
+      <a href="index.html">HOME</a>
+      <a href="artists.html">ARTISTS</a>
+      <a href="audition.html">AUDITION</a>
+      <a href="store.html">STORE <span class="chip" style="margin-left:6px;">CART <span id="cartCount">0</span></span></a>
+      <a href="admin.html">ADMIN</a>
+    </nav>
+    <div id="authStatus" style="display:flex; gap:10px; align-items:center;"></div>
+
+    <button class="menu-btn" id="menuBtn">☰</button>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <p class="badge">LYB • ENTERTAINMENT</p>
+        <h1 class="hero-title">
+          This Is the <br/>
+          <span class="grad">Beginning!</span>
+        </h1>
+        <p class="hero-desc">
+          아티스트 매니지먼트 · 제작 · 공연 · 콘텐츠까지.
+          LYBENTERTAINMENT는 새로운 가능성을 함께 만듭니다.
+        </p>
+
+        <div class="hero-cta">
+          <a class="btn primary" href="audition.html">오디션 지원</a>
+          <a class="btn ghost" href="artists.html">아티스트 보기</a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat"><p class="stat-num">12+</p><p class="stat-label">Artists</p></div>
+          <div class="stat"><p class="stat-num">50+</p><p class="stat-label">Projects</p></div>
+          <div class="stat"><p class="stat-num">24/7</p><p class="stat-label">Support</p></div>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="hero-card-top">
+          <p class="chip">Featured</p>
+          <p class="muted" style="font-weight:900;">Official Showcase</p>
+        </div>
+        <div class="hero-card-media"></div>
+        <div class="hero-card-bottom">
+          <p class="hero-card-title">LYB Showcase 2026</p>
+          <p class="muted" style="margin:0; font-weight:850;">Audition & Debut Project</p>
+          <a class="text-link" href="audition.html">자세히 보기 →</a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-glow"></div>
+  </section>
+
+<section class="section alt" id="news">
+  <div class="container">
+    <div class="section-head">
+      <h2>NOTICE & EVENT</h2>
+      <p class="muted">LYBENTERTAINMENT의 최신 소식</p>
+    </div>
+
+    <div class="grid two">
+      <!-- 공지/이벤트 리스트 -->
+      <div class="panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+          <p class="chip">LATEST</p>
+          <a class="text-link" href="admin.html" data-admin-only>관리자에서 등록 →</a>
+        </div>
+
+        <div class="grid" id="homePostList" style="gap:12px; margin-top:12px;"></div>
+        <p class="muted small" style="margin:12px 0 0;">* 게시글은 admin에서 등록한 내용이 자동으로 반영됩니다.</p>
+      </div>
+
+      <!-- 우측 하이라이트(고정/대표) -->
+      <div class="panel" id="homePostFeatured">
+        <p class="chip">FEATURED</p>
+        <h3 style="margin:10px 0 6px; font-weight:950;">등록된 고정 글이 없습니다</h3>
+        <p class="muted" style="margin:0; font-weight:850; line-height:1.55;">
+          admin에서 “상단 고정(PIN)”을 체크하면 여기에 대표 소식으로 표시돼요.
+        </p>
+
+        <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn primary" href="audition.html">오디션 지원</a>
+          <a class="btn ghost" href="#contact">문의하기</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<footer class="footer" id="contact">
+  <div class="container footer-grid">
+
+    <div class="footer-col footer-brand">
+      <img src="LYB LOGO FULL WHITE.png" alt="LYB Logo" class="footer-logo" />
+
+      <div class="footer-col-text">
+        <h3>연락처</h3>
+        <p class="muted">대표 : 이영빈</p>
+        <p class="muted">Email: contact@lybent.com</p>
+        <p class="muted">전화: 02-123-4567</p>
+        <p class="muted">주소: 서울시 강남구 테헤란로 123</p>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h3>link</h3>
+      <ul class="footer-links">
+        <li><a href="https://www.youtube.com/@LYBEntertainment">YouTube</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Twitter</a></li>
+        <li><a href="#">Facebook</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h3>미니맵</h3>
+      <ul class="footer-links">
+        <li><a href="#">아티스트</a></li>
+        <li><a href="#">오디션</a></li>
+        <li><a href="#">스토어</a></li>
+        <li><a href="#">맨 위로</a></li>
+      </ul>
+    </div>
+</div>
+<div class="footer-bottom">
+    <p class="muted">© <span id="year">2025</span> LYBENTERTAINMENT.</p>
+  </div>
+</footer>
+</main>
+
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
