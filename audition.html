@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Audition | LYBENTERTAINMENT</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html">
+      <img src="LYB_logo.png" alt="LYB Logo" class="brand-logo" />
+    </a>
+
+    <nav class="nav" id="nav">
+      <a href="index.html">HOME</a>
+      <a href="artists.html">ARTISTS</a>
+      <a href="audition.html">AUDITION</a>
+      <a href="store.html">STORE <span class="chip" style="margin-left:6px;">CART <span id="cartCount">0</span></span></a>
+      <a href="admin.html">ADMIN</a>
+    </nav>
+    <div id="authStatus" style="display:flex; gap:10px; align-items:center;"></div>
+
+    <button class="menu-btn" id="menuBtn">☰</button>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-head">
+    <div class="breadcrumb">
+      <a href="index.html">HOME</a> <span class="muted">/</span> <span>AUDITION</span>
+    </div>
+    <h1 class="page-title">AUDITION</h1>
+    <p class="page-desc">LYB와 함께 성장할 아티스트를 찾습니다. 아래 절차를 확인하고 지원서를 제출하세요.</p>
+  </div>
+
+  <section class="section" style="padding-top:10px;">
+    <div class="grid two">
+      <div class="panel">
+        <h3 style="margin-top:0;">지원 절차</h3>
+        <table class="table">
+          <thead>
+            <tr><th>STEP</th><th>내용</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>온라인 지원 (기본 정보 + 소개)</td></tr>
+            <tr><td>2</td><td>1차 검토 (개별 연락)</td></tr>
+            <tr><td>3</td><td>현장/화상 오디션</td></tr>
+            <tr><td>4</td><td>최종 합격 및 계약 안내</td></tr>
+          </tbody>
+        </table>
+
+        <hr class="hr" />
+
+        <h3>FAQ</h3>
+        <div class="card">
+          <p style="margin:0; font-weight:950;">Q. 나이 제한이 있나요?</p>
+          <p class="muted" style="margin:8px 0 0; font-weight:850;">A. 분야별로 상이하며, 역량 중심으로 평가합니다.</p>
+        </div>
+        <div class="card" style="margin-top:12px;">
+          <p style="margin:0; font-weight:950;">Q. 영상/음원은 어떻게 제출하나요?</p>
+          <p class="muted" style="margin:8px 0 0; font-weight:850;">A. 지원 메일에 링크(유튜브) 링크를 첨부해 주세요.</p>
+        </div>
+      </div>
+
+      <form class="panel form" id="auditionForm">
+        <div class="notice">버튼을 누르면 메일 앱이 열리고, 내용이 자동으로 채워집니다.</div>
+
+        <label>
+          이름
+          <input name="name" type="text" placeholder="홍길동" required />
+        </label>
+        <label>
+          연락처/이메일
+          <input name="contact" type="text" placeholder="010-0000-0000 / email@example.com" required />
+        </label>
+        <label>
+          지원 분야
+          <select name="field" required>
+            <option value="">선택</option>
+            <option>보컬</option>
+            <option>댄스</option>
+            <option>연기</option>
+            <option>프로듀싱/작곡</option>
+          </select>
+        </label>
+        <label>
+          소개
+          <textarea name="message" rows="5" placeholder="경력/자기소개를 적어주세요." required></textarea>
+        </label>
+
+        <button class="btn primary full" type="submit">이메일로 지원 보내기</button>
+        <p class="muted small" style="margin:10px 0 0;">* 실제 접수 이메일은 app.js에서 audition@lybent.com 으로 설정되어 있어요.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+  <div class="footer-bottom">
+    <p class="muted">© <span id="year"></span> LYBENTERTAINMENT.</p>
+  </div>
+</footer>
+
+
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

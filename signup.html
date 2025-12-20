@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up | LYBENTERTAINMENT</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html">
+      <img src="LYB_logo.png" alt="LYB Logo" class="brand-logo" />
+    </a>
+
+    <nav class="nav" id="nav">
+      <a href="index.html">HOME</a>
+      <a href="artists.html">ARTISTS</a>
+      <a href="audition.html">AUDITION</a>
+      <a href="store.html">STORE <span class="chip" style="margin-left:6px;">CART <span id="cartCount">0</span></span></a>
+      <a href="admin.html">ADMIN</a>
+    </nav>
+    <div id="authStatus" style="display:flex; gap:10px; align-items:center;"></div>
+
+    <button class="menu-btn" id="menuBtn">☰</button>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-head">
+    <div class="breadcrumb">
+      <a href="index.html">HOME</a> <span class="muted">/</span> <span>SIGN UP</span>
+    </div>
+    <h1 class="page-title">회원가입</h1>
+    <p class="page-desc">로컬 저장 기반 데모 회원가입입니다. (새로고침해도 계정이 남아요)</p>
+  </div>
+
+  <section class="section" style="padding-top:10px;">
+    <div class="panel form" style="max-width:520px; margin:0 auto;">
+      <form id="signupForm">
+        <label>
+          이름
+          <input name="name" type="text" placeholder="슬기로운 영빈" required />
+        </label>
+
+        <label>
+          이메일
+          <input name="email" type="email" placeholder="you@lybent.com" required />
+        </label>
+
+        <label>
+          비밀번호 (4자 이상)
+          <input name="password" type="password" placeholder="••••" required />
+        </label>
+
+        <label>
+          비밀번호 확인
+          <input name="password2" type="password" placeholder="••••" required />
+        </label>
+
+        <button class="btn primary full" type="submit">가입하기</button>
+        <p class="muted small" style="margin:10px 0 0;">
+          이미 계정이 있나요? <a class="text-link" href="login.html">로그인</a>
+        </p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

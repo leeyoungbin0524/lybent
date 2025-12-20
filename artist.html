@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Artist | LYBENTERTAINMENT</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html">
+      <img src="LYB_logo.png" alt="LYB Logo" class="brand-logo" />
+    </a>
+
+    <nav class="nav" id="nav">
+      <a href="index.html">HOME</a>
+      <a href="artists.html">ARTISTS</a>
+      <a href="audition.html">AUDITION</a>
+      <a href="store.html">STORE <span class="chip" style="margin-left:6px;">CART <span id="cartCount">0</span></span></a>
+      <a href="admin.html">ADMIN</a>
+    </nav>
+    <div id="authStatus" style="display:flex; gap:10px; align-items:center;"></div>
+
+    <button class="menu-btn" id="menuBtn">☰</button>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-head">
+    <div class="breadcrumb">
+      <a href="index.html">HOME</a> <span class="muted">/</span>
+      <a href="artists.html">ARTISTS</a> <span class="muted">/</span> <span>PROFILE</span>
+    </div>
+    <h1 class="page-title">ARTIST PROFILE</h1>
+    <p class="page-desc">URL의 id 값에 따라 상세 프로필이 바뀝니다. 예: artist.html?id=artist-a</p>
+  </div>
+
+  <section class="section" style="padding-top:10px;">
+    <div id="artistDetail"></div>
+  </section>
+</main>
+
+  <div class="footer-bottom">
+    <p class="muted">© <span id="year"></span> LYBENTERTAINMENT.</p>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
+

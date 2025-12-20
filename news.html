@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Notice & Event | LYBENTERTAINMENT</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html">
+      <img src="LYB%20logo.png" alt="LYB Logo" class="brand-logo" />
+      <span class="brand-text">LYBENTERTAINMENT</span>
+    </a>
+
+    <nav class="nav" id="nav">
+      <a href="index.html">HOME</a>
+      <a href="artists.html">ARTISTS</a>
+      <a href="audition.html">AUDITION</a>
+      <a href="store.html">STORE <span class="chip" style="margin-left:6px;">CART <span id="cartCount">0</span></span></a>
+      <a href="admin.html">ADMIN</a>
+    </nav>
+
+    <div id="authStatus" style="display:flex; gap:10px; align-items:center;"></div>
+    <button class="menu-btn" id="menuBtn">☰</button>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-head">
+    <div class="breadcrumb">
+      <a href="index.html">HOME</a> <span class="muted">/</span> <span>NOTICE & EVENT</span>
+    </div>
+    <h1 class="page-title">공지사항 · 이벤트</h1>
+    <p class="page-desc">LYBENTERTAINMENT의 최신 소식입니다.</p>
+  </div>
+
+  <section class="section" style="padding-top:10px;">
+    <div class="grid two">
+      <!-- 리스트 -->
+      <div class="panel">
+        <div class="section-head">
+          <h2>목록</h2>
+          <p class="muted">공지/이벤트/보도자료</p>
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
+          <button class="btn small" data-filter="ALL">전체</button>
+          <button class="btn small" data-filter="NOTICE">공지</button>
+          <button class="btn small" data-filter="EVENT">이벤트</button>
+          <button class="btn small" data-filter="RELEASE">보도자료</button>
+        </div>
+
+        <div class="grid" id="newsList" style="gap:12px;"></div>
+      </div>
+
+      <!-- 상세 -->
+      <div class="panel" id="newsDetail">
+        <div class="notice">왼쪽에서 게시글을 선택하면 상세가 표시됩니다.</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
