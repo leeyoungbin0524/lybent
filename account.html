@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account | LYB</title>
+  <link rel="icon" type="image/png" href="LYB로고 모음2.png">
+
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"/>
+  <link rel="stylesheet" href="app.css" />
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="topbar-left">
+      <!-- ✅ account 페이지는 drawer가 없으니 메뉴버튼 제거 -->
+      <a class="logo-link" href="index.html" aria-label="홈으로">
+        <img id="logo-mobile" class="logo" src="LYB LOGO FULL DARK.png" alt="LYB Logo">
+      </a>
+      <span class="pill" id="clock-m">—</span>
+      <span class="pill" id="authStatus">Auth: —</span>
+    </div>
+    <button class="iconbtn" onclick="toggleTheme()">Dark</button>
+  </div>
+
+  <div class="wrap">
+    <aside class="side">
+      <a class="logo-link" href="index.html">
+        <div class="logo-box">
+          <img id="logo-desktop" src="LYB LOGO FULL DARK.png" alt="LYB Logo">
+        </div>
+      </a>
+
+      <div class="nav">
+        <a href="index.html">Home</a>
+        <a href="artists.html">Artists</a>
+        <a href="news.html">News</a>
+        <a href="audition.html">Audition</a>
+        <a href="goods.html">Goods</a>
+      </div>
+
+      <div class="side-actions">
+        <button class="btn" onclick="toggleTheme()">Dark Mode</button>
+
+        <!-- 관리자만 보이게 될 버튼 -->
+        <a class="btn" id="adminBtn" href="admin.html" style="text-align:center;display:none;">Admin</a>
+
+        <a class="btn" href="index.html" style="text-align:center;display:block;">Back</a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="h-top">
+        <div class="pill">Account</div>
+        <div class="pill" id="clock">—</div>
+      </div>
+
+      <h1 class="page-title">내 계정</h1>
+      <p class="page-sub">로그아웃 / 비밀번호 변경 / 이름 변경</p>
+
+      <div style="max-width:760px;border:1px solid var(--line);background:var(--panel);border-radius:18px;padding:18px;">
+        <div class="pill" id="accountEmail" style="margin-bottom:12px;">email: —</div>
+
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;">
+          <div style="font-size:12px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;">Display Name</div>
+          <input id="displayName" placeholder="이름(표시용)"
+            style="border:1px solid var(--line);background:var(--bg);color:var(--text);padding:12px;border-radius:14px;outline:none;">
+          <button id="saveNameBtn" class="btn" type="button">이름 저장</button>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;">
+          <div style="font-size:12px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;">New Password</div>
+          <input id="newPassword" type="password" placeholder="새 비밀번호"
+            style="border:1px solid var(--line);background:var(--bg);color:var(--text);padding:12px;border-radius:14px;outline:none;">
+          <button id="savePwBtn" class="btn" type="button">비밀번호 변경</button>
+        </div>
+
+        <button id="logoutBtn"
+          style="width:100%;padding:14px 16px;border-radius:16px;border:1px solid var(--text);background:var(--text);color:var(--bg);cursor:pointer;font-weight:900;">
+          로그아웃
+        </button>
+
+        <div id="accountMsg" style="margin-top:10px;color:var(--muted);font-size:13px;line-height:1.6;">—</div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ✅ 스크립트 로드 순서 중요 -->
+  <script src="app.js"></script>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script src="auth-status.js"></script>
+  <script src="account.js"></script>
+
+  <!-- ✅ account 페이지에서도 관리자면 Admin 버튼 보이게 -->
+  <script>
+    (async function () {
+      const sb = window.supabaseClient;
+      const adminBtn = document.getElementById("adminBtn");
+      if (!sb || !adminBtn) return;
+
+      adminBtn.style.display = "none";
+
+      try {
+        const { data: { session } } = await sb.auth.getSession();
+        if (!session?.user) return;
+
+        const { data, error } = await sb
+          .from("admins")
+          .select("user_id")
+          .eq("user_id", session.user.id)
+          .maybeSingle();
+
+        if (!error && data) adminBtn.style.display = "block";
+      } catch (e) {
+        console.warn("[account] admin check failed:", e);
+      }
+    })();
+  </script>
+</body>
+</html>

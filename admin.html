@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LYB Admin</title>
+  <link rel="icon" type="image/png" href="LYB로고 모음2.png">
+
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"/>
+
+  <style>
+    :root{
+      --bg:#0b0c10;
+      --panel:#121420;
+      --panel2:rgba(255,255,255,.03);
+      --text:#f2f3f7;
+      --muted:rgba(242,243,247,.65);
+      --line:rgba(242,243,247,.12);
+      --accent:#5cffb0;
+      font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", Arial, sans-serif;
+    }
+    body{ margin:0; background:var(--bg); color:var(--text); }
+    a{ color:inherit; text-decoration:none; }
+    button, input, select, textarea{ font-family:inherit; }
+
+    .iconbtn{
+      border:1px solid var(--line);
+      background:transparent;
+      color:var(--text);
+      padding:8px 10px;
+      border-radius:12px;
+      cursor:pointer;
+    }
+    .btn{
+      border:1px solid var(--line);
+      background:var(--panel2);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+    }
+    .btn:hover{ border-color:rgba(255,255,255,.22); }
+    .pill{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:8px 10px; border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      color:var(--muted);
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    .shell{ display:flex; min-height:100vh; }
+
+    /* Sidebar */
+    .sidebar{
+      width:280px;
+      border-right:1px solid var(--line);
+      background:rgba(255,255,255,.02);
+      padding:16px;
+      position:sticky;
+      top:0;
+      height:100vh;
+      display:flex;
+      flex-direction:column;
+      box-sizing:border-box;
+    }
+    .brand{
+      display:flex; gap:12px; align-items:center;
+      padding:10px; border-radius:16px;
+      border:1px solid var(--line);
+      background:var(--panel);
+    }
+    .avatar{
+      width:40px; height:40px; border-radius:14px;
+      display:flex; align-items:center; justify-content:center;
+      font-weight:900;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+    }
+    .brandTitle{ font-weight:900; }
+    .brandSub{ color:var(--muted); font-size:12px; margin-top:2px; }
+
+    .nav{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      margin-top:12px;
+    }
+    .navItem{
+      display:flex; align-items:center; gap:10px;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid transparent;
+      background:transparent;
+      color:var(--text);
+      cursor:pointer;
+      text-align:left;
+      width:100%;
+    }
+    .navItem:hover{ background:rgba(255,255,255,.04); border-color:rgba(255,255,255,.08); }
+    .navItem.active{ background:var(--panel); border-color:var(--line); }
+    .ico{ width:22px; display:inline-flex; justify-content:center; }
+
+    .sideFoot{
+      margin-top:auto;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      padding-top:14px;
+    }
+    .footNote{ color:var(--muted); font-size:12px; line-height:1.4; word-break:break-all; }
+
+    /* Content */
+    .content{ flex:1; }
+    .topbar{
+      position:sticky; top:0; z-index:60;
+      display:flex; justify-content:space-between; align-items:center;
+      padding:12px 14px;
+      border-bottom:1px solid var(--line);
+      background:rgba(11,12,16,.72);
+      backdrop-filter: blur(10px);
+    }
+    .topbarLeft{ display:flex; align-items:center; gap:10px; }
+    .main{ padding:18px; box-sizing:border-box; }
+    .title{ margin:10px 0 8px; font-size:28px; font-weight:900; }
+    .sub{ margin:0 0 12px; color:var(--muted); }
+
+    .toolbar{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin:12px 0 14px;
+      align-items:center;
+    }
+    .input{
+      padding:10px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      outline:none;
+    }
+
+    .list{ margin-top:14px; display:grid; gap:14px; }
+    .card{
+      border:1px solid var(--line);
+      background:var(--panel);
+      border-radius:16px;
+      padding:16px;
+    }
+    .cardTitle{ font-weight:900; font-size:16px; }
+    .muted{ color:var(--muted); font-size:13px; line-height:1.6; }
+
+    .danger{
+      padding:8px 10px;
+      border-radius:10px;
+      border:1px solid #ff4d4d;
+      background:transparent;
+      color:#ff4d4d;
+      cursor:pointer;
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap:12px;
+      margin-top:14px;
+    }
+    @media(max-width:1000px){
+      .cards{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media(max-width:640px){
+      .cards{ grid-template-columns: 1fr; }
+    }
+    .statK{ color:var(--muted); font-size:12px; letter-spacing:.12em; text-transform:uppercase; }
+    .statV{ font-size:28px; font-weight:900; margin-top:6px; }
+
+    .tableWrap{
+      border:1px solid var(--line);
+      background:var(--panel);
+      border-radius:16px;
+      overflow:hidden;
+    }
+    table{ width:100%; border-collapse:collapse; }
+    th, td{ padding:10px 12px; border-bottom:1px solid var(--line); text-align:left; font-size:13px; }
+    th{ color:var(--muted); font-weight:800; background:rgba(255,255,255,.02); }
+    tr:hover td{ background:rgba(255,255,255,.02); }
+
+    /* Mobile sidebar drawer */
+    #menuBtn{ display:none; }
+    .overlay{ display:none; }
+    @media(max-width:900px){
+      #menuBtn{ display:inline-flex; }
+      .sidebar{
+        position:fixed; left:-320px; top:0;
+        width:280px; height:100vh; z-index:80;
+        transition:left .22s ease;
+      }
+      .sidebar.open{ left:0; }
+      .overlay{
+        display:block;
+        position:fixed; inset:0;
+        background:rgba(0,0,0,.55);
+        z-index:70;
+        opacity:0;
+        pointer-events:none;
+        transition:opacity .22s ease;
+      }
+      .overlay.show{ opacity:1; pointer-events:auto; }
+      .shell{ display:block; }
+      .content{ margin-left:0; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="overlay" id="overlay" aria-hidden="true"></div>
+
+  <div class="shell">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar" aria-label="admin navigation">
+      <div class="brand">
+        <div class="avatar" id="adminAvatar">L</div>
+        <div>
+          <div class="brandTitle" id="adminName">—</div>
+          <div class="brandSub">LYBENTERTAINMENT</div>
+        </div>
+      </div>
+
+      <nav class="nav" style="margin-top:12px;">
+        <button class="navItem active" data-view="applicants" type="button">
+          <span class="ico">📄</span><span>지원자</span>
+        </button>
+        <button class="navItem" data-view="stats" type="button">
+          <span class="ico">📊</span><span>통계</span>
+        </button>
+         <button class="navItem" data-view="artists" type="button">
+          <span class="ico">🎤</span><span>아티스트</span>
+        </button>
+        <button class="navItem" data-view="goods" type="button">
+          <span class="ico">🛍️</span><span>굿즈</span>
+        </button>
+        <button class="navItem" data-view="shipping" type="button">
+          <span class="ico">🚚</span><span>주문/배송</span>
+        </button>
+        <button class="navItem" data-view="settings" type="button">
+          <span class="ico">⚙️</span><span>설정</span>
+        </button>
+      </nav>
+
+      <div class="sideFoot">
+        <a class="btn" href="index.html" style="text-align:center;">사이트로</a>
+        <button class="btn" id="logoutBtn" type="button">로그아웃</button>
+        <div class="footNote" id="adminEmail">—</div>
+      </div>
+    </aside>
+
+    <!-- Content -->
+    <section class="content">
+      <div class="topbar">
+        <div class="topbarLeft">
+          <button class="iconbtn" id="menuBtn" aria-label="menu">☰</button>
+          <div class="pill" id="status">Loading…</div>
+          <div class="pill" id="authStatus">Auth: —</div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <div class="pill" id="nowTime">—</div>
+        </div>
+      </div>
+
+      <div class="main">
+        <!-- Applicants -->
+        <section class="view" id="view-applicants">
+          <div class="title">지원자 관리</div>
+          <div class="sub">Audition 테이블 데이터를 확인/삭제할 수 있어요.</div>
+
+          <div class="toolbar">
+            <input id="searchInput" class="input" placeholder="이름 검색" />
+            <select id="filterPosition" class="input">
+              <option value="">전체 포지션</option>
+              <option value="보컬">보컬</option>
+              <option value="댄스">댄스</option>
+              <option value="연기">연기</option>
+              <option value="기타">기타</option>
+            </select>
+            <button id="refreshBtn" class="btn" type="button">새로고침</button>
+          </div>
+
+          <div id="list" class="list"></div>
+        </section>
+
+        <!-- Stats -->
+        <section class="view" id="view-stats" hidden>
+          <div class="title">통계</div>
+          <div class="sub">지원자 현황을 요약해 보여줍니다.</div>
+
+          <div class="cards">
+            <div class="card"><div class="statK">총 지원자</div><div class="statV" id="statTotal">—</div></div>
+            <div class="card"><div class="statK">보컬</div><div class="statV" id="statVocal">—</div></div>
+            <div class="card"><div class="statK">댄스</div><div class="statV" id="statDance">—</div></div>
+            <div class="card"><div class="statK">연기</div><div class="statV" id="statAct">—</div></div>
+            <div class="card"><div class="statK">기타</div><div class="statV" id="statEtc">—</div></div>
+          </div>
+        </section>
+        <section class="view" id="view-artists" hidden>
+  <div class="title">아티스트</div>
+  <div class="sub">artists 테이블을 조회/등록/수정합니다.</div>
+
+  <div class="card" style="margin-top:12px;">
+    <div style="font-weight:900;margin-bottom:10px;">아티스트 등록 / 수정</div>
+
+    <form id="artistForm" style="display:grid;gap:10px;grid-template-columns:1fr 1fr;">
+      <input id="artistName" class="input" placeholder="이름 (필수)" required style="grid-column:1 / -1;">
+      <input id="artistRole" class="input" placeholder="포지션/설명 (예: Vocal, Actor)">
+      <input id="artistSort" class="input" placeholder="정렬(숫자, 작을수록 위)" type="number" value="0">
+
+      <select id="artistActive" class="input">
+        <option value="true">활성</option>
+        <option value="false">비활성</option>
+      </select>
+
+      <input id="artistEditId" type="hidden" value="">
+
+      <input id="artistImageUrl" class="input" placeholder="이미지 URL (선택)" style="grid-column:1 / -1;">
+      <input id="artistImageFile" class="input" type="file" accept="image/*" style="grid-column:1 / -1;">
+
+      <textarea id="artistBio" class="input" placeholder="소개(선택)"
+        style="grid-column:1 / -1; min-height:110px;"></textarea>
+
+      <button id="artistSaveBtn" class="btn" type="submit" style="width:max-content;">등록 / 저장</button>
+      <button id="artistCancelBtn" class="btn" type="button" style="width:max-content; display:none;">수정 취소</button>
+
+      <div class="muted" style="grid-column:1 / -1;">
+        ※ 등록하면 artists.html에 자동 표시됩니다(활성 아티스트 기준).
+      </div>
+    </form>
+
+    <div class="pill" id="artistMsg" style="margin-top:10px;display:none;"></div>
+  </div>
+
+  <div class="toolbar" style="margin-top:12px;">
+    <input id="artistSearch" class="input" placeholder="이름 검색" />
+    <button id="artistRefreshBtn" class="btn" type="button">새로고침</button>
+  </div>
+
+  <div class="tableWrap">
+    <table>
+      <thead>
+        <tr>
+          <th>이름</th><th>역할</th><th>정렬</th><th>상태</th><th>관리</th>
+        </tr>
+      </thead>
+      <tbody id="artistTbody">
+        <tr><td colspan="5" style="color:var(--muted);">불러오는 중…</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pill" style="margin-top:12px;">※ Storage 버킷: <b>artist-images</b> 생성 필요(파일 업로드 쓸 때)</div>
+</section>
+
+        <!-- Goods -->
+        <section class="view" id="view-goods" hidden>
+          <div class="title">굿즈</div>
+          <div class="sub">products 테이블을 조회/등록/수정합니다.</div>
+
+          <div class="card" style="margin-top:12px;">
+            <div style="font-weight:900;margin-bottom:10px;">상품 등록 / 수정</div>
+
+            <form id="goodsCreateForm" style="display:grid;gap:10px;grid-template-columns:1fr 1fr;">
+              <input id="newGoodsName" class="input" placeholder="상품명 (필수)" required style="grid-column:1 / -1;">
+
+              <input id="newGoodsPrice" class="input" placeholder="가격 (숫자)" type="number" min="0">
+              <input id="newGoodsStock" class="input" placeholder="재고 (숫자)" type="number" min="0">
+
+              <select id="newGoodsActive" class="input">
+                <option value="true">활성</option>
+                <option value="false">비활성</option>
+              </select>
+
+              <input id="editGoodsId" type="hidden" value="">
+
+              <input id="newGoodsImage" class="input" placeholder="이미지 URL (선택)" style="grid-column:1 / -1;">
+              <input id="newGoodsImageFile" class="input" type="file" accept="image/*" style="grid-column:1 / -1;">
+
+              <textarea id="newGoodsDesc" class="input" placeholder="상품 설명 (선택)"
+                style="grid-column:1 / -1; min-height:110px;"></textarea>
+
+              <button id="goodsCreateBtn" class="btn" type="submit" style="width:max-content;">등록 / 저장</button>
+              <button id="goodsCancelBtn" class="btn" type="button" style="width:max-content; display:none;">수정 취소</button>
+
+              <div class="muted" style="grid-column:1 / -1;">
+                ※ 등록하면 goods.html에 자동 표시됩니다(활성 상품 기준).
+              </div>
+            </form>
+
+            <div class="pill" id="goodsCreateMsg" style="margin-top:10px;display:none;"></div>
+          </div>
+
+          <div class="toolbar" style="margin-top:12px;">
+            <input id="goodsSearch" class="input" placeholder="상품명 검색" />
+            <button id="goodsRefreshBtn" class="btn" type="button">새로고침</button>
+          </div>
+
+          <div class="tableWrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>상품명</th><th>가격</th><th>재고</th><th>상태</th><th>관리</th>
+                </tr>
+              </thead>
+              <tbody id="goodsTbody">
+                <tr><td colspan="5" style="color:var(--muted);">불러오는 중…</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="pill" style="margin-top:12px;">
+            ※ Storage 버킷: <b>product-images</b> 생성 필요
+          </div>
+        </section>
+
+        <!-- Shipping -->
+        <section class="view" id="view-shipping" hidden>
+          <div class="title">주문/배송</div>
+          <div class="sub">orders 테이블을 조회합니다.</div>
+
+          <div class="toolbar">
+            <select id="orderStatus" class="input">
+              <option value="">전체 상태</option>
+              <option value="pending">pending</option>
+              <option value="paid">paid</option>
+              <option value="shipping">shipping</option>
+              <option value="done">done</option>
+            </select>
+            <button id="ordersRefreshBtn" class="btn" type="button">새로고침</button>
+          </div>
+
+          <div class="tableWrap">
+            <table>
+              <thead>
+                <tr><th>날짜</th><th>주문자</th><th>상품</th><th>수량</th><th>상태</th><th>주소</th></tr>
+              </thead>
+              <tbody id="ordersTbody">
+                <tr><td colspan="6" style="color:var(--muted);">불러오는 중…</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="pill" style="margin-top:12px;">※ orders 테이블이 없으면 Supabase에서 생성 필요</div>
+        </section>
+
+        <!-- Settings -->
+        <section class="view" id="view-settings" hidden>
+          <div class="title">설정</div>
+          <div class="sub">관리자 도구를 확장할 수 있어요.</div>
+
+          <div class="card">
+            <div style="font-weight:900;margin-bottom:8px;">빠른 작업</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <button class="btn" id="exportCsvBtn" type="button">CSV 내보내기</button>
+              <button class="btn" id="clearFiltersBtn" type="button">필터 초기화</button>
+            </div>
+            <div class="muted" style="margin-top:10px;">
+              * CSV는 브라우저에서 바로 다운로드됩니다.
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </div>
+
+  <!-- ✅ 로드 순서 -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script src="auth-status.js"></script>
+
+  <script>
+    const sb = window.supabaseClient;
+
+    // 시간표시
+    function tick(){
+      const el = document.getElementById("nowTime");
+      if(!el) return;
+      el.textContent = new Date().toLocaleString();
+    }
+    setInterval(tick, 1000);
+    tick();
+
+    function setStatus(t){
+      const el = document.getElementById("status");
+      if(el) el.textContent = t || "";
+    }
+
+    function escapeHtml(s=""){
+      return String(s).replace(/[&<>"']/g, m => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"
+      }[m]));
+    }
+    function nameFromEmail(email){
+      if(!email) return "Admin";
+      return (email.split("@")[0] || "Admin");
+    }
+
+    // 모바일 사이드바
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("overlay");
+    function openSidebar(){
+      sidebar.classList.add("open");
+      overlay.classList.add("show");
+      overlay.setAttribute("aria-hidden","false");
+    }
+    function closeSidebar(){
+      sidebar.classList.remove("open");
+      overlay.classList.remove("show");
+      overlay.setAttribute("aria-hidden","true");
+    }
+
+    let auditionData = [];
+    let goodsData = [];
+    let ordersData = [];
+
+    async function requireLogin(){
+      const { data: { user }, error } = await sb.auth.getUser();
+      if (error || !user) {
+        location.href = "login.html";
+        return null;
+      }
+      return user;
+    }
+
+    async function isAdmin(){
+      const { data: { user }, error: userErr } = await sb.auth.getUser();
+      if (userErr || !user) return false;
+
+      const { data, error } = await sb
+        .from("admins")
+        .select("user_id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      return !error && !!data;
+    }
+
+    function switchView(view){
+      const views = ["applicants","stats","artists","goods","shipping","settings"];
+      for (const v of views) {
+        const el = document.getElementById("view-" + v);
+        if (el) el.hidden = (v !== view);
+      }
+      document.querySelectorAll(".navItem").forEach(btn=>{
+        btn.classList.toggle("active", btn.dataset.view === view);
+      });
+      closeSidebar();
+
+      if(view === "artists") loadArtists();
+      if(view === "goods") loadGoods();     // 들어갈 때마다 최신화
+      if(view === "shipping") loadOrders(); // ✅ 항상 로드
+    }
+
+    // ---------- Applicants ----------
+    function renderStats(data){
+      document.getElementById("statTotal").textContent = String((data||[]).length);
+      document.getElementById("statVocal").textContent = String((data||[]).filter(x => x.position === "보컬").length);
+      document.getElementById("statDance").textContent = String((data||[]).filter(x => x.position === "댄스").length);
+      document.getElementById("statAct").textContent = String((data||[]).filter(x => x.position === "연기").length);
+      document.getElementById("statEtc").textContent = String((data||[]).filter(x => x.position === "기타").length);
+    }
+
+    function renderList(data){
+      const list = document.getElementById("list");
+      if(!list) return;
+
+      const keyword = (document.getElementById("searchInput").value || "").toLowerCase();
+      const filter = document.getElementById("filterPosition").value;
+
+      const filtered = (data || []).filter(r=>{
+        const matchName = (r.name || "").toLowerCase().includes(keyword);
+        const matchPos = filter ? r.position === filter : true;
+        return matchName && matchPos;
+      });
+
+      if(!filtered.length){
+        list.innerHTML = `<div class="card">지원자가 없습니다.</div>`;
+      } else {
+        list.innerHTML = filtered.map(r=>`
+          <div class="card">
+            <div class="cardTitle">${escapeHtml(r.name || "—")} · ${escapeHtml(r.position || "")}</div>
+            <div class="muted">${escapeHtml(r.phone || "")}</div>
+            <div class="muted">${escapeHtml(r.video_link || "")}</div>
+            <div class="muted" style="margin-top:8px;">${escapeHtml(r.message || "")}</div>
+            <div style="margin-top:12px;display:flex;gap:8px;">
+              <button type="button" class="danger" onclick="deleteApplicant('${r.id}')">삭제</button>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      renderStats(data);
+    }
+
+    async function loadApplicants(){
+      setStatus("지원자 불러오는 중…");
+      const { data, error } = await sb
+        .from("Audition")
+        .select("*")
+        .order("created_at", { ascending:false });
+
+      if(error){
+        setStatus("지원자 조회 실패: " + error.message);
+        return;
+      }
+      auditionData = data || [];
+      setStatus(`지원자 ${auditionData.length}명`);
+      renderList(auditionData);
+    }
+
+    async function deleteApplicant(id){
+      if(!confirm("정말 삭제하시겠습니까?")) return;
+      const { error } = await sb.from("Audition").delete().eq("id", id);
+      if(error){ alert("삭제 실패: " + error.message); return; }
+      await loadApplicants();
+    }
+    window.deleteApplicant = deleteApplicant;
+
+    // ---------- Artists (CRUD + Image Upload + Edit) ----------
+let artistsData = [];
+
+const ARTIST_IMAGE_BUCKET = "artist-images";
+
+const artistForm = document.getElementById("artistForm");
+const artistMsg = document.getElementById("artistMsg");
+const artistEditIdEl = document.getElementById("artistEditId");
+const artistCancelBtn = document.getElementById("artistCancelBtn");
+
+function setArtistMsg(t){
+  if(!artistMsg) return;
+  artistMsg.textContent = t || "";
+  artistMsg.style.display = t ? "inline-flex" : "none";
+}
+
+function clearArtistForm(){
+  ["artistName","artistRole","artistSort","artistBio","artistImageUrl"].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.value = (id === "artistSort") ? "0" : "";
+  });
+  const act = document.getElementById("artistActive");
+  if(act) act.value = "true";
+  const fileEl = document.getElementById("artistImageFile");
+  if(fileEl) fileEl.value = "";
+  if(artistEditIdEl) artistEditIdEl.value = "";
+  if(artistCancelBtn) artistCancelBtn.style.display = "none";
+  const btn = document.getElementById("artistSaveBtn");
+  if(btn) btn.textContent = "등록 / 저장";
+}
+
+function enterArtistEditMode(a){
+  document.getElementById("artistName").value = a.name || "";
+  document.getElementById("artistRole").value = a.role || "";
+  document.getElementById("artistSort").value = (a.sort_order ?? 0);
+  document.getElementById("artistActive").value = (a.is_active === false) ? "false" : "true";
+  document.getElementById("artistImageUrl").value = a.image_url || "";
+  document.getElementById("artistBio").value = a.bio || "";
+  if(artistEditIdEl) artistEditIdEl.value = a.id;
+  if(artistCancelBtn) artistCancelBtn.style.display = "inline-flex";
+  const btn = document.getElementById("artistSaveBtn");
+  if(btn) btn.textContent = "수정 저장";
+  setArtistMsg("수정 모드: 값 바꾸고 '수정 저장' 누르기");
+}
+
+window.editArtist = function(id){
+  const a = (artistsData || []).find(x => x.id === id);
+  if(!a) return;
+  enterArtistEditMode(a);
+  artistForm?.scrollIntoView({ behavior:"smooth", block:"start" });
+};
+
+function renderArtists(rows){
+  const q = (document.getElementById("artistSearch")?.value || "").toLowerCase();
+  const tbody = document.getElementById("artistTbody");
+  if(!tbody) return;
+
+  const filtered = (rows || []).filter(r => (r.name || "").toLowerCase().includes(q));
+
+  if(!filtered.length){
+    tbody.innerHTML = `<tr><td colspan="5" style="color:var(--muted);">아티스트가 없습니다.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(a=>{
+    const active = (a.is_active === false) ? "비활성" : "활성";
+    const thumb = a.image_url
+      ? `<img src="${escapeHtml(a.image_url)}" alt="img"
+            style="width:42px;height:42px;object-fit:cover;border-radius:10px;border:1px solid var(--line);" />`
+      : "";
+    const imgLink = a.image_url
+      ? `<a class="pill" href="${escapeHtml(a.image_url)}" target="_blank" rel="noreferrer" style="padding:4px 8px;">이미지</a>`
+      : "";
+
+    return `<tr>
+      <td>${escapeHtml(a.name || "")}</td>
+      <td>${escapeHtml(a.role || "")}</td>
+      <td>${escapeHtml(a.sort_order ?? 0)}</td>
+      <td>${escapeHtml(active)}</td>
+      <td style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        ${thumb}
+        ${imgLink}
+        <button type="button" class="btn" onclick="editArtist('${a.id}')">수정</button>
+        <button type="button" class="danger" onclick="deleteArtist('${a.id}')">삭제</button>
+      </td>
+    </tr>`;
+  }).join("");
+}
+
+async function loadArtists(){
+  const tbody = document.getElementById("artistTbody");
+  if(tbody) tbody.innerHTML = `<tr><td colspan="5" style="color:var(--muted);">불러오는 중…</td></tr>`;
+
+  const { data, error } = await sb
+    .from("artists")
+    .select("id, created_at, name, role, bio, image_url, is_active, sort_order")
+    .order("sort_order", { ascending:true })
+    .order("created_at", { ascending:false });
+
+  if(error){
+    if(tbody) tbody.innerHTML = `<tr><td colspan="5" style="color:var(--muted);">artists 조회 실패: ${escapeHtml(error.message)}</td></tr>`;
+    artistsData = [];
+    return;
+  }
+
+  artistsData = data || [];
+  renderArtists(artistsData);
+}
+
+async function saveArtist(e){
+  e?.preventDefault();
+  setArtistMsg("저장 중…");
+  setStatus("아티스트 저장 중…");
+
+  const { data:{ session }, error:sessErr } = await sb.auth.getSession();
+  if(sessErr || !session?.user){
+    setArtistMsg("❌ 로그인 필요/세션 오류");
+    setStatus("❌ 세션 오류");
+    return;
+  }
+
+  const name = (document.getElementById("artistName")?.value || "").trim();
+  const role = (document.getElementById("artistRole")?.value || "").trim();
+  const sort_order = Number(document.getElementById("artistSort")?.value || 0) || 0;
+  const bio = (document.getElementById("artistBio")?.value || "").trim();
+  const is_active = (document.getElementById("artistActive")?.value === "true");
+
+  const imageUrlInput = (document.getElementById("artistImageUrl")?.value || "").trim();
+  const fileEl = document.getElementById("artistImageFile");
+  const file = fileEl?.files?.[0] || null;
+
+  if(!name){
+    setArtistMsg("❌ 이름은 필수입니다.");
+    setStatus("❌ 이름 필요");
+    return;
+  }
+
+  let finalImageUrl = imageUrlInput;
+
+  if(file){
+    setArtistMsg("이미지 업로드 중…");
+
+    const safeName = (name || "artist").toLowerCase().replace(/[^a-z0-9\-_.]/g, "-");
+    const ext = (file.name.split(".").pop() || "png").toLowerCase();
+    const path = `${Date.now()}_${safeName}.${ext}`;
+
+    const { error: upErr } = await sb.storage
+      .from(ARTIST_IMAGE_BUCKET)
+      .upload(path, file, { upsert:true, cacheControl:"3600", contentType:file.type || undefined });
+
+    if(upErr){
+      setArtistMsg("❌ 이미지 업로드 실패: " + upErr.message);
+      setStatus("❌ 업로드 실패");
+      return;
+    }
+
+    const { data: pub } = sb.storage.from(ARTIST_IMAGE_BUCKET).getPublicUrl(path);
+    finalImageUrl = pub?.publicUrl || "";
+  }
+
+  const payload = { name, is_active, sort_order };
+  if(role) payload.role = role;
+  if(bio) payload.bio = bio;
+  if(finalImageUrl) payload.image_url = finalImageUrl;
+
+  const editingId = (artistEditIdEl?.value || "").trim();
+
+  if(editingId){
+    const { error } = await sb.from("artists").update(payload).eq("id", editingId);
+    if(error){
+      setArtistMsg("❌ 수정 실패: " + error.message);
+      setStatus("❌ 수정 실패");
+      return;
+    }
+    setArtistMsg("✅ 수정 완료");
+    setStatus("✅ 수정 완료");
+  } else {
+    const { error } = await sb.from("artists").insert(payload);
+    if(error){
+      setArtistMsg("❌ 등록 실패: " + error.message);
+      setStatus("❌ 등록 실패");
+      return;
+    }
+    setArtistMsg("✅ 등록 완료");
+    setStatus("✅ 등록 완료");
+  }
+
+  clearArtistForm();
+  await loadArtists();
+}
+
+async function deleteArtist(id){
+  if(!confirm("정말 삭제하시겠습니까?")) return;
+  setArtistMsg("삭제 중…");
+  const { error } = await sb.from("artists").delete().eq("id", id);
+  if(error){
+    setArtistMsg("❌ 삭제 실패: " + error.message);
+    return;
+  }
+  setArtistMsg("✅ 삭제 완료");
+  await loadArtists();
+}
+window.deleteArtist = deleteArtist;
+
+artistForm?.addEventListener("submit", saveArtist);
+artistCancelBtn?.addEventListener("click", ()=>{ clearArtistForm(); setArtistMsg(""); });
+
+    // ---------- Goods (CRUD + Image Upload + Edit) ----------
+    const goodsForm = document.getElementById("goodsCreateForm");
+    const goodsMsg = document.getElementById("goodsCreateMsg");
+    const editGoodsIdEl = document.getElementById("editGoodsId");
+    const cancelEditBtn = document.getElementById("goodsCancelBtn");
+
+    // ✅ Supabase Storage 버킷명 (대시보드에서 생성 필요)
+    const PRODUCT_IMAGE_BUCKET = "product-images";
+
+    function setGoodsMsg(t){
+      if(!goodsMsg) return;
+      goodsMsg.textContent = t || "";
+      goodsMsg.style.display = t ? "inline-flex" : "none";
+    }
+
+    function numOrNull(v){
+      const s = String(v ?? "").trim();
+      if(!s) return null;
+      const n = Number(s);
+      return Number.isFinite(n) ? n : null;
+    }
+    function intOrNull(v){
+      const n = numOrNull(v);
+      return (n === null) ? null : Math.trunc(n);
+    }
+
+    function clearGoodsForm(){
+      ["newGoodsName","newGoodsPrice","newGoodsStock","newGoodsImage","newGoodsDesc"].forEach(id=>{
+        const el = document.getElementById(id);
+        if(el) el.value = "";
+      });
+      const act = document.getElementById("newGoodsActive");
+      if(act) act.value = "true";
+
+      const fileEl = document.getElementById("newGoodsImageFile");
+      if(fileEl) fileEl.value = "";
+
+      if(editGoodsIdEl) editGoodsIdEl.value = "";
+      if(cancelEditBtn) cancelEditBtn.style.display = "none";
+
+      const btn = document.getElementById("goodsCreateBtn");
+      if(btn) btn.textContent = "등록 / 저장";
+    }
+
+    function enterEditMode(p){
+      if(!p) return;
+      document.getElementById("newGoodsName").value = p.name || "";
+      document.getElementById("newGoodsPrice").value = (p.price ?? "");
+      document.getElementById("newGoodsStock").value = (p.stock ?? "");
+      document.getElementById("newGoodsActive").value = (p.is_active === false) ? "false" : "true";
+      document.getElementById("newGoodsImage").value = p.image_url || "";
+      document.getElementById("newGoodsDesc").value = p.description || "";
+
+      if(editGoodsIdEl) editGoodsIdEl.value = p.id;
+      if(cancelEditBtn) cancelEditBtn.style.display = "inline-flex";
+
+      const btn = document.getElementById("goodsCreateBtn");
+      if(btn) btn.textContent = "수정 저장";
+
+      setGoodsMsg("수정 모드: 값 바꾸고 '수정 저장' 누르기");
+    }
+
+    window.editProduct = function(id){
+      const p = (goodsData || []).find(x => x.id === id);
+      enterEditMode(p);
+      goodsForm?.scrollIntoView({ behavior:"smooth", block:"start" });
+    };
+
+    function renderGoods(rows){
+      const q = (document.getElementById("goodsSearch").value || "").toLowerCase();
+      const tbody = document.getElementById("goodsTbody");
+      const filtered = (rows || []).filter(r => (r.name || "").toLowerCase().includes(q));
+
+      if(!filtered.length){
+        tbody.innerHTML = `<tr><td colspan="5" style="color:var(--muted);">상품이 없습니다.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(p=>{
+        const price = (p.price ?? "—");
+        const stock = (p.stock ?? "—");
+        const active = (p.is_active === false) ? "비활성" : "활성";
+
+        const thumb = p.image_url
+          ? `<img src="${escapeHtml(p.image_url)}" alt="img"
+                style="width:42px;height:42px;object-fit:cover;border-radius:10px;border:1px solid var(--line);" />`
+          : "";
+
+        const imgLink = p.image_url
+          ? `<a class="pill" href="${escapeHtml(p.image_url)}" target="_blank" rel="noreferrer"
+                style="padding:4px 8px;">이미지</a>`
+          : "";
+
+        return `<tr>
+          <td>${escapeHtml(p.name || "")}</td>
+          <td>${escapeHtml(price)}</td>
+          <td>${escapeHtml(stock)}</td>
+          <td>${escapeHtml(active)}</td>
+          <td style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            ${thumb}
+            ${imgLink}
+            <button type="button" class="btn" onclick="editProduct('${p.id}')">수정</button>
+            <button type="button" class="danger" onclick="deleteProduct('${p.id}')">삭제</button>
+          </td>
+        </tr>`;
+      }).join("");
+    }
+
+    async function loadGoods(){
+      const tbody = document.getElementById("goodsTbody");
+      tbody.innerHTML = `<tr><td colspan="5" style="color:var(--muted);">불러오는 중…</td></tr>`;
+
+      const { data, error } = await sb
+        .from("products")
+        .select("id, created_at, name, price, stock, is_active, image_url, description")
+        .order("created_at", { ascending:false });
+
+      if(error){
+        tbody.innerHTML = `<tr><td colspan="5" style="color:var(--muted);">products 조회 실패: ${escapeHtml(error.message)}</td></tr>`;
+        goodsData = [];
+        return;
+      }
+
+      goodsData = data || [];
+      renderGoods(goodsData);
+    }
+
+    async function addProduct(e){
+      e?.preventDefault();
+
+      setGoodsMsg("저장 중…");
+      setStatus("상품 저장 중…");
+
+      const { data:{ session }, error:sessErr } = await sb.auth.getSession();
+      if(sessErr){
+        setGoodsMsg("❌ 세션 오류: " + sessErr.message);
+        setStatus("❌ 세션 오류");
+        return;
+      }
+      if(!session?.user){
+        setGoodsMsg("❌ 로그인 필요");
+        setStatus("❌ 로그인 필요");
+        return;
+      }
+
+      const name = (document.getElementById("newGoodsName")?.value || "").trim();
+      const price = numOrNull(document.getElementById("newGoodsPrice")?.value);
+      const stock = intOrNull(document.getElementById("newGoodsStock")?.value);
+      const desc = (document.getElementById("newGoodsDesc")?.value || "").trim();
+      const is_active = (document.getElementById("newGoodsActive")?.value === "true");
+
+      const imageUrlInput = (document.getElementById("newGoodsImage")?.value || "").trim();
+      const fileEl = document.getElementById("newGoodsImageFile");
+      const file = fileEl?.files?.[0] || null;
+
+      if(!name){
+        setGoodsMsg("❌ 상품명을 입력하세요.");
+        setStatus("❌ 상품명 필요");
+        return;
+      }
+
+      let finalImageUrl = imageUrlInput;
+
+      // 파일 업로드 있으면 storage 업로드
+      if(file){
+        setGoodsMsg("이미지 업로드 중…");
+
+        const safeName = (name || "product").toLowerCase().replace(/[^a-z0-9\-_.]/g, "-");
+        const ext = (file.name.split(".").pop() || "png").toLowerCase();
+        const path = `${Date.now()}_${safeName}.${ext}`;
+
+        const { error: upErr } = await sb.storage
+          .from(PRODUCT_IMAGE_BUCKET)
+          .upload(path, file, { upsert:true, cacheControl:"3600", contentType:file.type || undefined });
+
+        if(upErr){
+          setGoodsMsg("❌ 이미지 업로드 실패: " + upErr.message);
+          setStatus("❌ 업로드 실패");
+          return;
+        }
+
+        const { data: pub } = sb.storage.from(PRODUCT_IMAGE_BUCKET).getPublicUrl(path);
+        finalImageUrl = pub?.publicUrl || "";
+      }
+
+      const payload = { name, is_active };
+      if(price !== null) payload.price = price;
+      if(stock !== null) payload.stock = stock;
+      if(desc) payload.description = desc;
+      if(finalImageUrl) payload.image_url = finalImageUrl;
+
+      const editingId = (editGoodsIdEl?.value || "").trim();
+
+      if(editingId){
+        setGoodsMsg("수정 중…");
+        const { error } = await sb.from("products").update(payload).eq("id", editingId);
+        if(error){
+          setGoodsMsg("❌ 수정 실패: " + error.message);
+          setStatus("❌ 수정 실패");
+          return;
+        }
+        setGoodsMsg("✅ 수정 완료");
+        setStatus("✅ 수정 완료");
+      } else {
+        const { error } = await sb.from("products").insert(payload);
+        if(error){
+          setGoodsMsg("❌ 등록 실패: " + error.message);
+          setStatus("❌ 등록 실패");
+          return;
+        }
+        setGoodsMsg("✅ 등록 완료");
+        setStatus("✅ 등록 완료");
+      }
+
+      clearGoodsForm();
+      await loadGoods();
+    }
+
+    async function deleteProduct(id){
+      if(!confirm("정말 삭제하시겠습니까?")) return;
+      setGoodsMsg("삭제 중…");
+
+      const { error } = await sb.from("products").delete().eq("id", id);
+      if(error){
+        setGoodsMsg("❌ 삭제 실패: " + error.message);
+        return;
+      }
+
+      setGoodsMsg("✅ 삭제 완료");
+      await loadGoods();
+    }
+    window.deleteProduct = deleteProduct;
+
+    goodsForm?.addEventListener("submit", addProduct);
+    cancelEditBtn?.addEventListener("click", () => {
+      clearGoodsForm();
+      setGoodsMsg("");
+    });
+
+    // ---------- Orders ----------
+    function renderOrders(rows){
+      const status = document.getElementById("orderStatus")?.value || "";
+      const tbody = document.getElementById("ordersTbody");
+      if(!tbody) return;
+
+      const filtered = status ? (rows || []).filter(r => r.status === status) : (rows || []);
+      if(!filtered.length){
+        tbody.innerHTML = `<tr><td colspan="6" style="color:var(--muted);">주문이 없습니다.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = filtered.map(o=>{
+        const dt = o.created_at ? new Date(o.created_at).toLocaleString() : "—";
+        const buyer = (o.buyer_email || o.buyer_name || o.user_id || "—");
+        const item = (o.product_name || o.product_id || "—");
+        const qty = (o.qty ?? "—");
+        const st = (o.status || "—");
+        const addr = [o.shipping_postal, o.shipping_address1, o.shipping_address2].filter(Boolean).join(" ");
+        return `<tr>
+          <td>${escapeHtml(dt)}</td>
+          <td>${escapeHtml(buyer)}</td>
+          <td>${escapeHtml(item)}</td>
+          <td>${escapeHtml(qty)}</td>
+          <td>${escapeHtml(st)}</td>
+          <td>${escapeHtml(addr || "—")}</td>
+        </tr>`;
+      }).join("");
+    }
+
+    // ✅ 너가 빠뜨렸던 핵심: loadOrders 정의
+    async function loadOrders(){
+      const tbody = document.getElementById("ordersTbody");
+      if(!tbody) return;
+
+      tbody.innerHTML = `<tr><td colspan="6" style="color:var(--muted);">불러오는 중…</td></tr>`;
+
+      const { data, error } = await sb
+        .from("orders")
+        .select("*")
+        .order("created_at", { ascending:false });
+
+      if(error){
+        tbody.innerHTML = `<tr><td colspan="6" style="color:var(--muted);">orders 조회 실패: ${escapeHtml(error.message)}</td></tr>`;
+        ordersData = [];
+        return;
+      }
+
+      ordersData = data || [];
+      renderOrders(ordersData);
+    }
+    
+
+    // ---------- CSV / Logout ----------
+    function exportCsv(){
+      const rows = auditionData || [];
+      const headers = ["created_at","name","phone","position","video_link","message","id"];
+      const esc = (v) => {
+        const s = (v ?? "").toString().replaceAll("\r\n", "\n").replaceAll("\r", "\n");
+        const needs = /[\n\",]/.test(s);
+        const out = s.replaceAll('"', '""');
+        return needs ? `"${out}"` : out;
+      };
+      const csv = [headers.join(","), ...rows.map(r => headers.map(h => esc(r[h])).join(","))].join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `auditions_${new Date().toISOString().slice(0,10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    async function logout(){
+      setStatus("로그아웃 중…");
+      try { await sb.auth.signOut(); } catch(e){}
+      location.href = "login.html";
+    }
+
+    window.addEventListener("DOMContentLoaded", async () => {
+      if(!sb){
+        setStatus("❌ supabaseClient 없음 (supabase-client.js 로드/순서 확인)");
+        console.error("[admin] supabaseClient missing");
+        return;
+      }
+
+      // 모바일 메뉴
+      document.getElementById("menuBtn")?.addEventListener("click", openSidebar);
+      overlay?.addEventListener("click", closeSidebar);
+
+      // 메뉴 클릭
+      document.querySelectorAll(".navItem").forEach(btn=>{
+        btn.addEventListener("click", ()=> switchView(btn.dataset.view));
+      });
+
+      // 툴바 이벤트
+      document.getElementById("searchInput")?.addEventListener("input", ()=> renderList(auditionData));
+      document.getElementById("filterPosition")?.addEventListener("change", ()=> renderList(auditionData));
+      document.getElementById("refreshBtn")?.addEventListener("click", loadApplicants);
+      document.getElementById("logoutBtn")?.addEventListener("click", logout);
+
+      document.getElementById("goodsSearch")?.addEventListener("input", ()=> renderGoods(goodsData));
+      document.getElementById("goodsRefreshBtn")?.addEventListener("click", loadGoods);
+
+      document.getElementById("artistSearch")?.addEventListener("input", ()=> renderArtists(artistsData));
+      document.getElementById("artistRefreshBtn")?.addEventListener("click", loadArtists);
+
+      document.getElementById("orderStatus")?.addEventListener("change", ()=> renderOrders(ordersData));
+      document.getElementById("ordersRefreshBtn")?.addEventListener("click", loadOrders);
+
+      document.getElementById("exportCsvBtn")?.addEventListener("click", exportCsv);
+      document.getElementById("clearFiltersBtn")?.addEventListener("click", ()=>{
+        const s = document.getElementById("searchInput"); if(s) s.value = "";
+        const f = document.getElementById("filterPosition"); if(f) f.value = "";
+        renderList(auditionData);
+      });
+
+      // 로그인 확인 + 사이드바 이름/이메일 표시
+      setStatus("로그인 확인 중…");
+      const user = await requireLogin();
+      if(!user) return;
+
+      const email = user.email || "";
+      const displayName = (user.user_metadata?.display_name || "").trim();
+      const label = displayName ? displayName : nameFromEmail(email);
+
+      const nameEl = document.getElementById("adminName");
+      const emailEl = document.getElementById("adminEmail");
+      const avEl = document.getElementById("adminAvatar");
+      if(nameEl) nameEl.textContent = label;
+      if(emailEl) emailEl.textContent = email || "—";
+      if(avEl) avEl.textContent = (label[0] || "A").toUpperCase();
+
+      // 관리자 권한 체크
+      setStatus("관리자 권한 확인 중…");
+      const ok = await isAdmin();
+      if(!ok){
+        setStatus("❌ 관리자만 접근 가능 (admins 테이블 확인)");
+        return;
+      }
+
+      // 초기 로드(들어오자마자 바로 보이게)
+      setStatus("데이터 불러오는 중…");
+      await loadApplicants();
+      setStatus(`지원자 ${auditionData.length}명`);
+      switchView("applicants");
+    });
+  </script>
+</body>
+</html>

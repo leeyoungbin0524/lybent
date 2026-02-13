@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>News | LYB</title>
+  <link rel="icon" type="image/png" href="LYB로고 모음2.png">
+
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"/>
+  <link rel="stylesheet" href="app.css">
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="topbar-left">
+      <button class="iconbtn" onclick="openDrawer()">☰</button>
+      <a class="logo-link" href="index.html">
+        <img id="logo-mobile" class="logo" src="LYB LOGO FULL DARK.png" alt="LYB Logo">
+      </a>
+      <span class="pill" id="clock-m">—</span>
+      <span class="pill" id="authStatus">Auth: —</span>
+    </div>
+    <button class="iconbtn" onclick="toggleTheme()">Dark</button>
+  </div>
+
+  <div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-head">
+      <a class="logo-link" href="index.html" onclick="closeDrawer()">
+        <div class="logo-box" style="width:150px;">
+          <img id="logo-drawer" src="LYB LOGO FULL DARK.png" alt="LYB Logo">
+        </div>
+      </a>
+      <button class="iconbtn" onclick="closeDrawer()">✕</button>
+    </div>
+
+    <nav class="drawer-nav">
+      <a href="index.html" onclick="closeDrawer()">Home</a>
+      <a href="artists.html" onclick="closeDrawer()">Artists</a>
+      <a href="news.html" onclick="closeDrawer()">News</a>
+      <a href="audition.html" onclick="closeDrawer()">Audition</a>
+      <a href="goods.html" onclick="closeDrawer()">Goods</a>
+</nav>
+
+    <div class="drawer-actions">
+      <button class="btn" onclick="toggleTheme()">Dark Mode</button>
+      <div class="note">Contact · info@lybent.store</div>
+    </div>
+  </aside>
+
+  <div class="wrap">
+    <aside class="side">
+      <a class="logo-link" href="index.html">
+        <div class="logo-box">
+          <img id="logo-desktop" src="LYB LOGO FULL DARK.png" alt="LYB Logo">
+        </div>
+      </a>
+
+      <div class="nav">
+        <a href="index.html">Home</a>
+        <a href="artists.html">Artists</a>
+        <a class="active" href="news.html">News</a>
+        <a href="audition.html">Audition</a>
+        <a href="goods.html">Goods</a>
+</div>
+
+      <div class="side-actions">
+        <button class="btn" onclick="toggleTheme()">Dark Mode</button>
+        <!-- 관리자만 보이게 될 버튼 (처음엔 숨김) -->
+<a class="btn" id="adminBtn" href="admin.html"
+   style="text-align:center;display:none;">Admin</a>
+<a class="btn" id="accountBtn" href="login.html" style="text-align:center;display:block;">Login</a>
+</div>
+    </aside>
+
+    <main class="main">
+      <div class="h-top">
+        <div class="pill">News</div>
+        <div class="pill" id="clock">—</div>
+      </div>
+
+      <h1 class="page-title">News</h1>
+      <p class="page-sub">게시글은 <b>news.json</b> 파일만 수정하면 자동으로 반영돼요.</p>
+
+      <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
+        <input id="newsSearch" placeholder="검색 (예: 데뷔, 티저)"
+          style="flex:1 1 240px;min-width:240px;border:1px solid var(--line);background:var(--panel);padding:12px 12px;border-radius:14px;color:var(--text);outline:none;">
+        <button class="pill" data-news-filter="ALL" type="button">All</button>
+        <button class="pill" data-news-filter="NOTICE" type="button">Notice</button>
+        <button class="pill" data-news-filter="MEDIA" type="button">Media</button>
+        <button class="pill" data-news-filter="AUDITION" type="button">Audition</button>
+      </div>
+
+      <section id="newsList" style="margin-top:14px;display:grid;gap:12px;"></section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script src="app.js"></script>
+  <script src="news.js"></script>
+  <script src="auth-status.js"></script>
+</body>
+</html>
