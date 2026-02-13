@@ -55,7 +55,7 @@
       grid.innerHTML = `
         <div class="card" style="border:1px solid var(--line);background:var(--panel);border-radius:18px;padding:16px;">
           <div style="font-weight:900;">상품이 없습니다.</div>
-          <div style="color:var(--muted);font-size:13px;margin-top:6px;">어드민에서 상품을 등록해줘.</div>
+          <div style="color:var(--muted);font-size:13px;margin-top:6px;">준비중.</div>
         </div>
       `;
       return;
