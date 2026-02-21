@@ -8,7 +8,7 @@
   const msg = document.getElementById("goodsMsg");
   const search = document.getElementById("goodsSearch");
   const reloadBtn = document.getElementById("goodsReload");
-  const buyBtn = `<button class="btn" type="button" onclick="buyNow('${p.id}')">구매하기</button>`;
+  
 
   if (!sb) {
     showMsg("❌ supabaseClient 없음 (supabase-client.js 로드/순서 확인)");
@@ -90,7 +90,7 @@
             <span class="pill">재고: ${escapeHtml(stock)}</span>
           </div>
 
-          <button class="btn" type="button" style="width:100%;">구매 준비중</button>
+          <button class="btn" type="button" style="width:100%;" onclick="buyNow('${p.id}')">구매하기</button>
         </article>
       `;
     }).join("");
@@ -129,6 +129,7 @@
 
   // init
   window.addEventListener("DOMContentLoaded", load);
+  
   window.buyNow = function(productId){
   location.href = `checkout.html?product_id=${encodeURIComponent(productId)}`;
 };
