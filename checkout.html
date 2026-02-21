@@ -64,11 +64,20 @@
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
           <input id="qty" class="input" type="number" min="1" value="1" required>
-          <input id="postal" class="input" placeholder="우편번호(선택)">
+
+          <!-- ✅ 우편번호 + 주소검색 버튼 -->
+          <div style="display:grid;grid-template-columns:1fr auto;gap:10px;">
+            <input id="postal" class="input" placeholder="우편번호" readonly>
+            <button id="addrSearchBtn" class="btn" type="button" style="width:auto;">주소 검색</button>
+          </div>
         </div>
 
-        <input id="addr1" class="input" placeholder="주소(선택)">
-        <input id="addr2" class="input" placeholder="상세주소(선택)">
+        <!-- ✅ 주소는 검색으로 채우고, 상세주소만 직접 입력 -->
+        <input id="addr1" class="input" placeholder="기본주소" readonly>
+        <input id="addr2" class="input" placeholder="상세주소 (동/호수 등)">
+
+        <div id="addrExtra" class="muted" style="font-size:13px;line-height:1.6;"></div>
+
         <textarea id="memo" class="input" placeholder="요청사항(선택)" style="min-height:110px;"></textarea>
 
         <button class="btn" type="submit" style="width:max-content;">주문 생성</button>
@@ -81,6 +90,9 @@
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script src="supabase-client.js"></script>
   <script src="auth-status.js"></script>
+
+  <!-- ✅ 카카오(다음) 우편번호 -->
+  <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
   <script>
     const sb = window.supabaseClient;
@@ -101,6 +113,32 @@
         return null;
       }
       return user;
+    }
+
+    // ✅ 주소 검색
+    function openDaumPostcode(){
+      new daum.Postcode({
+        oncomplete: function(data){
+          const postalEl = document.getElementById("postal");
+          const addr1El = document.getElementById("addr1");
+          const addr2El = document.getElementById("addr2");
+          const extraEl = document.getElementById("addrExtra");
+
+          if(postalEl) postalEl.value = data.zonecode || "";
+          const baseAddr = data.roadAddress || data.jibunAddress || "";
+          if(addr1El) addr1El.value = baseAddr;
+
+          // 참고항목 표시(법정동/건물명)
+          let extra = "";
+          if (data.bname && /[동|로|가]$/g.test(data.bname)) extra += data.bname;
+          if (data.buildingName && data.apartment === "Y") extra += (extra ? ", " : "") + data.buildingName;
+          extra = extra ? `참고: (${extra})` : "";
+          if(extraEl) extraEl.textContent = extra;
+
+          // 상세주소 포커스
+          if(addr2El) addr2El.focus();
+        }
+      }).open();
     }
 
     let product = null;
@@ -150,6 +188,14 @@
         return;
       }
 
+      // ✅ 주소 필수(원하면 풀어도 됨)
+      const postal = (document.getElementById("postal").value || "").trim();
+      const addr1 = (document.getElementById("addr1").value || "").trim();
+      if(!postal || !addr1){
+        setMsg("❌ 주소 검색으로 배송지를 입력해 주세요.");
+        return;
+      }
+
       const qty = Math.max(1, parseInt(document.getElementById("qty").value || "1", 10));
       const payload = {
         user_id: user.id,
@@ -161,8 +207,8 @@
         buyer_name: (document.getElementById("buyerName").value || "").trim(),
         buyer_phone: (document.getElementById("buyerPhone").value || "").trim(),
         buyer_email: user.email || null,
-        shipping_postal: (document.getElementById("postal").value || "").trim(),
-        shipping_address1: (document.getElementById("addr1").value || "").trim(),
+        shipping_postal: postal,
+        shipping_address1: addr1,
         shipping_address2: (document.getElementById("addr2").value || "").trim(),
         memo: (document.getElementById("memo").value || "").trim(),
       };
@@ -177,6 +223,10 @@
     });
 
     window.addEventListener("DOMContentLoaded", async ()=>{
+      // 주소검색 버튼 연결
+      const btn = document.getElementById("addrSearchBtn");
+      if(btn) btn.addEventListener("click", openDaumPostcode);
+
       await loadProduct();
     });
   </script>
