@@ -1103,7 +1103,8 @@ artistCancelBtn?.addEventListener("click", ()=>{ clearArtistForm(); setArtistMsg
         const addr = (o.shipping_postal || "—");
         const addr2 = (o.shipping_address1 || "—");
         const addr3 = (o.shipping_address2 || "—");
-        return <tr>
+        return 
+          <tr>
           <td>${escapeHtml(dt)}</td>
           <td>${escapeHtml(buyer)}</td>
           <td>${escapeHtml(item)}</td>
