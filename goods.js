@@ -128,4 +128,8 @@
 
   // init
   window.addEventListener("DOMContentLoaded", load);
+  window.buyNow = function(productId){
+  location.href = `checkout.html?product_id=${encodeURIComponent(productId)}`;
+};
+  
 })();
