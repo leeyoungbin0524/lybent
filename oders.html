@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Orders | LYB</title>
+  <link rel="icon" type="image/png" href="LYB로고 모음2.png">
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"/>
+  <link rel="stylesheet" href="app.css">
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="topbar-left">
+      <button class="iconbtn" onclick="openDrawer()">☰</button>
+      <a class="logo-link" href="index.html">
+        <img id="logo-mobile" class="logo" src="LYB LOGO FULL DARK.png" alt="LYB Logo">
+      </a>
+      <span class="pill" id="clock-m">—</span>
+      <span class="pill" id="authStatus">Auth: —</span>
+    </div>
+    <button class="iconbtn" onclick="toggleTheme()">Dark</button>
+  </div>
+
+  <div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-head">
+      <a class="logo-link" href="index.html" onclick="closeDrawer()">
+        <div class="logo-box" style="width:150px;">
+          <img id="logo-drawer" src="LYB LOGO FULL DARK.png" alt="LYB Logo">
+        </div>
+      </a>
+      <button class="iconbtn" onclick="closeDrawer()">✕</button>
+    </div>
+
+    <nav class="drawer-nav">
+      <a href="index.html" onclick="closeDrawer()">Home</a>
+      <a href="artists.html" onclick="closeDrawer()">Artists</a>
+      <a href="news.html" onclick="closeDrawer()">News</a>
+      <a href="audition.html" onclick="closeDrawer()">Audition</a>
+      <a href="goods.html" onclick="closeDrawer()">Goods</a>
+      <a href="orders.html" onclick="closeDrawer()">My Orders</a>
+    </nav>
+
+    <div class="drawer-actions">
+      <button class="btn" onclick="toggleTheme()">Dark Mode</button>
+      <div class="note">Contact · info@lybent.store</div>
+    </div>
+  </aside>
+
+  <div class="wrap">
+    <aside class="side">
+      <a class="logo-link" href="index.html">
+        <div class="logo-box">
+          <img id="logo-desktop" src="LYB LOGO FULL DARK.png" alt="LYB Logo">
+        </div>
+      </a>
+
+      <div class="nav">
+        <a href="index.html">Home</a>
+        <a href="artists.html">Artists</a>
+        <a href="news.html">News</a>
+        <a href="audition.html">Audition</a>
+        <a href="goods.html">Goods</a>
+        <a class="active" href="orders.html">My Orders</a>
+      </div>
+
+      <div class="side-actions">
+        <button class="btn" onclick="toggleTheme()">Dark Mode</button>
+        <a class="btn" id="accountBtn" href="login.html" style="text-align:center;display:block;">Login</a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="h-top">
+        <div class="pill">My Orders</div>
+        <div class="pill" id="clock">—</div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-top:6px;">
+        <div>
+          <h1 class="page-title" style="margin-bottom:6px;">내 주문내역</h1>
+          <p class="page-sub" style="margin:0;">로그인한 계정의 주문만 표시됩니다.</p>
+        </div>
+        <button id="reloadBtn" class="btn" type="button" style="width:auto;">새로고침</button>
+      </div>
+
+      <div id="msg" class="pill" style="margin-top:12px;display:none;"></div>
+
+      <section id="ordersList" class="list" style="margin-top:14px;"></section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script src="auth-status.js"></script>
+
+  <script>
+    const sb = window.supabaseClient;
+
+    function setMsg(t){
+      const el = document.getElementById("msg");
+      if(!el) return;
+      el.textContent = t || "";
+      el.style.display = t ? "inline-flex" : "none";
+    }
+
+    function escapeHtml(s=""){
+      return String(s).replace(/[&<>"']/g, m => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"
+      }[m]));
+    }
+
+    function statusLabel(s){
+      const map = {
+        pending: "주문접수",
+        paid: "결제완료",
+        shipping: "배송중",
+        done: "배송완료",
+        cancelled: "취소"
+      };
+      return map[s] || (s || "—");
+    }
+
+    async function requireLogin(){
+      const { data:{ user }, error } = await sb.auth.getUser();
+      if(error || !user){
+        location.href = `login.html?next=${encodeURIComponent("orders.html")}`;
+        return null;
+      }
+      return user;
+    }
+
+    function renderOrders(rows){
+      const box = document.getElementById("ordersList");
+      if(!box) return;
+
+      if(!rows || !rows.length){
+        box.innerHTML = `<div class="card">주문 내역이 없습니다.</div>`;
+        return;
+      }
+
+      box.innerHTML = rows.map(o=>{
+        const dt = o.created_at ? new Date(o.created_at).toLocaleString() : "—";
+        const name = o.product_name || "—";
+        const qty = (o.qty ?? "—");
+        const st = statusLabel(o.status);
+        const postal = o.shipping_postal || "";
+        const addr1 = o.shipping_address1 || "";
+        const addr2 = o.shipping_address2 || "";
+        const addr = [postal, addr1, addr2].filter(Boolean).join(" ");
+
+        return `
+          <article class="card">
+            <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;">
+              <div style="font-weight:900;">${escapeHtml(name)} <span class="muted" style="font-weight:700;">x ${escapeHtml(qty)}</span></div>
+              <span class="pill">${escapeHtml(st)}</span>
+            </div>
+
+            <div class="muted" style="margin-top:8px;">주문일시: ${escapeHtml(dt)}</div>
+            ${addr ? `<div class="muted" style="margin-top:6px;">배송지: ${escapeHtml(addr)}</div>` : ``}
+            ${o.memo ? `<div class="muted" style="margin-top:6px;">요청: ${escapeHtml(o.memo)}</div>` : ``}
+
+            <div class="muted" style="margin-top:10px;font-size:12px;">
+              주문번호: ${escapeHtml(o.id || "—")}
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    async function loadMyOrders(){
+      setMsg("불러오는 중…");
+
+      const user = await requireLogin();
+      if(!user) return;
+
+      // ✅ 너 orders 테이블에 실제 존재하는 컬럼만 select 해야 오류 안 남
+      // 아래는 지금 너가 쓰던 payload 기준(없으면 삭제)
+      const { data, error } = await sb
+        .from("orders")
+        .select("id, created_at, status, product_id, product_name, qty, shipping_postal, shipping_address1, shipping_address2, memo")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending:false });
+
+      if(error){
+        setMsg("❌ 주문 조회 실패: " + error.message);
+        console.error(error);
+        renderOrders([]);
+        return;
+      }
+
+      setMsg("");
+      renderOrders(data || []);
+    }
+
+    document.getElementById("reloadBtn").addEventListener("click", loadMyOrders);
+
+    window.addEventListener("DOMContentLoaded", async ()=>{
+      await loadMyOrders();
+    });
+  </script>
+</body>
+</html>
