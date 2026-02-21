@@ -42,49 +42,109 @@
     </aside>
 
     <main class="main">
-      <div class="h-top">
-        <div class="pill">Checkout</div>
-        <div class="pill" id="clock">—</div>
-      </div>
+  <div class="h-top">
+    <div class="pill">Checkout</div>
+    <div class="pill" id="clock">—</div>
+  </div>
 
-      <h1 class="page-title">주문서</h1>
-      <p class="page-sub">주문 정보를 입력하면 주문이 생성됩니다. (결제 연동은 다음 단계)</p>
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-top:6px;">
+    <div>
+      <h1 class="page-title" style="margin-bottom:6px;">주문/결제</h1>
+      <p class="page-sub" style="margin:0;">배송지와 연락처를 입력하고 주문을 생성하세요.</p>
+    </div>
+    <a href="goods.html" class="pill" style="text-decoration:none;">← 굿즈로</a>
+  </div>
 
-      <div id="productBox" class="card" style="margin-top:14px;">
-        <div style="font-weight:900;">상품 불러오는 중…</div>
-      </div>
+  <!-- 2열 레이아웃(모바일은 자동 1열) -->
+  <div style="display:grid;grid-template-columns: 1.2fr .8fr;gap:14px;margin-top:14px;">
+    <!-- 왼쪽: 입력 -->
+    <section class="card" style="border:1px solid var(--line);background:var(--panel);border-radius:18px;padding:16px;">
+      <div style="font-weight:900;font-size:16px;">배송 정보</div>
+      <div class="muted" style="margin-top:6px;">* 주소는 ‘주소 검색’으로 입력됩니다.</div>
 
       <form id="checkoutForm"
-        style="margin-top:14px;max-width:760px;border:1px solid var(--line);background:var(--panel);border-radius:18px;padding:18px;display:grid;gap:10px;">
+        style="margin-top:12px;display:grid;gap:10px;">
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <input id="buyerName" class="input" placeholder="구매자 이름" required>
-          <input id="buyerPhone" class="input" placeholder="구매자 전화번호" required>
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <input id="qty" class="input" type="number" min="1" value="1" required>
-
-          <!-- ✅ 우편번호 + 주소검색 버튼 -->
-          <div style="display:grid;grid-template-columns:1fr auto;gap:10px;">
-            <input id="postal" class="input" placeholder="우편번호" readonly>
-            <button id="addrSearchBtn" class="btn" type="button" style="width:auto;">주소 검색</button>
+          <div style="display:grid;gap:8px;">
+            <div class="muted" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;">Name</div>
+            <input id="buyerName" class="input" placeholder="구매자 이름" required>
+          </div>
+          <div style="display:grid;gap:8px;">
+            <div class="muted" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;">Phone</div>
+            <input id="buyerPhone" class="input" placeholder="010-0000-0000" required>
           </div>
         </div>
 
-        <!-- ✅ 주소는 검색으로 채우고, 상세주소만 직접 입력 -->
-        <input id="addr1" class="input" placeholder="기본주소" readonly>
-        <input id="addr2" class="input" placeholder="상세주소 (동/호수 등)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div style="display:grid;gap:8px;">
+            <div class="muted" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;">Quantity</div>
+            <input id="qty" class="input" type="number" min="1" value="1" required>
+          </div>
 
-        <div id="addrExtra" class="muted" style="font-size:13px;line-height:1.6;"></div>
+          <div style="display:grid;gap:8px;">
+            <div class="muted" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;">Postal</div>
+            <div style="display:grid;grid-template-columns:1fr auto;gap:10px;">
+              <input id="postal" class="input" placeholder="우편번호" readonly>
+              <button id="addrSearchBtn" class="btn" type="button" style="width:auto;">주소 검색</button>
+            </div>
+          </div>
+        </div>
 
-        <textarea id="memo" class="input" placeholder="요청사항(선택)" style="min-height:110px;"></textarea>
+        <div style="display:grid;gap:8px;">
+          <div class="muted" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;">Address</div>
+          <input id="addr1" class="input" placeholder="기본주소" readonly>
+          <input id="addr2" class="input" placeholder="상세주소 (동/호수 등)">
+          <div id="addrExtra" class="muted" style="font-size:12px;"></div>
+        </div>
 
-        <button class="btn" type="submit" style="width:max-content;">주문 생성</button>
-        <div id="msg" class="pill" style="display:none;"></div>
+        <div style="display:grid;gap:8px;">
+          <div class="muted" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;">Memo</div>
+          <textarea id="memo" class="input" placeholder="요청사항(선택)" style="min-height:110px;"></textarea>
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:4px;">
+          <button class="btn" type="submit" style="width:auto;padding:12px 14px;border-radius:14px;font-weight:900;">
+            주문 생성
+          </button>
+          <div id="msg" class="pill" style="display:none;"></div>
+        </div>
+
+        <div class="muted" style="font-size:12px;line-height:1.6;margin-top:6px;">
+          주문 생성 후 결제 연동(토스/카카오페이 등)을 붙일 수 있어요.
+        </div>
       </form>
-    </main>
+    </section>
+
+    <!-- 오른쪽: 상품 요약 -->
+    <aside class="card" style="border:1px solid var(--line);background:var(--panel);border-radius:18px;padding:16px;height:max-content;">
+      <div style="font-weight:900;font-size:16px;">주문 상품</div>
+      <div id="productBox" style="margin-top:12px;">
+        <div style="font-weight:900;">상품 불러오는 중…</div>
+      </div>
+
+      <div style="margin-top:12px;border-top:1px solid var(--line);padding-top:12px;display:grid;gap:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div class="muted">소계</div>
+          <div class="pill" id="sumPrice">—</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div class="muted">배송비</div>
+          <div class="pill">무료(임시)</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-weight:900;">총 결제금액</div>
+          <div class="pill" id="totalPrice" style="color:var(--text);border-color:rgba(255,255,255,.18);">—</div>
+        </div>
+      </div>
+
+      <button class="btn" type="button" disabled
+        style="width:100%;margin-top:12px;padding:12px 14px;border-radius:14px;font-weight:900;opacity:.6;cursor:not-allowed;">
+        결제 준비중
+      </button>
+    </aside>
   </div>
+</main>
 
   <script src="app.js"></script>
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
