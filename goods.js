@@ -8,6 +8,7 @@
   const msg = document.getElementById("goodsMsg");
   const search = document.getElementById("goodsSearch");
   const reloadBtn = document.getElementById("goodsReload");
+  const buyBtn = `<button class="btn" type="button" onclick="buyNow('${p.id}')">구매하기</button>`;
 
   if (!sb) {
     showMsg("❌ supabaseClient 없음 (supabase-client.js 로드/순서 확인)");
