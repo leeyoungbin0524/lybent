@@ -1116,7 +1116,7 @@ artistCancelBtn?.addEventListener("click", ()=>{ clearArtistForm(); setArtistMsg
           <td>
             <select class="input" data-order-status="${escapeHtml(o.id)}" style="padding:8px 10px;">
               ${options(o.status || "pending")}
-            </select>
+            </select><td>
           <button class="btn" type="button" onclick="saveOrderStatus('${o.id}')">저장</button>
       </td>
         </tr>`;
