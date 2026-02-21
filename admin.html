@@ -439,8 +439,20 @@
           <div class="tableWrap">
             <table>
               <thead>
-                <tr><th>날짜</th><th>주문자</th><th>상품</th><th>전화번호</th><th>수량</th><th>상태</th><th>우편번호</th><th>주소</th><th>상세주소</th><th>상태변경</th><th>저장</th></tr>
-              </thead>
+<tr>
+  <th>날짜</th>
+  <th>구매자</th>
+  <th>상품</th>
+  <th>전화번호</th>
+  <th>수량</th>
+  <th>상태</th>
+  <th>우편번호</th>
+  <th>주소</th>
+  <th>상세주소</th>
+  <th>상태변경</th>
+  <th>저장</th>
+</tr>
+</thead>
               <tbody id="ordersTbody">
                 <tr><td colspan="6" style="color:var(--muted);">불러오는 중…</td></tr>
               </tbody>
@@ -1093,35 +1105,63 @@ artistCancelBtn?.addEventListener("click", ()=>{ clearArtistForm(); setArtistMsg
     `<option value="${v}" ${String(current)===v ? "selected" : ""}>${label}</option>`
   ).join(""));
       
-      tbody.innerHTML = filtered.map(o=>{
-        const dt = o.created_at ? new Date(o.created_at).toLocaleString() : "—";
-        const buyer = (o.buyer_email || o.buyer_name || o.user_id || "—");
-        const item = (o.product_name || o.product_id || "—");
-        const phone = (o.buyer_phone || "-");
-        const qty = (o.qty ?? "—");
-        const st = (o.status || "—");
-        const addr = (o.shipping_postal || "—");
-        const addr2 = (o.shipping_address1 || "—");
-        const addr3 = (o.shipping_address2 || "—");
-        return 
-          <tr>
-          <td>${escapeHtml(dt)}</td>
-          <td>${escapeHtml(buyer)}</td>
-          <td>${escapeHtml(item)}</td>
-          <td>${escapeHtml(phone)}</td>
-          <td>${escapeHtml(qty)}</td>
-          <td>${escapeHtml(st)}</td>
-          <td>${escapeHtml(addr || "—")}
-          <td>${escapeHtml(addr2 || "—")}
-          <td>${escapeHtml(addr3 || "—")}
-          <td>
-            <select class="input" data-order-status="${escapeHtml(o.id)}" style="padding:8px 10px;">
-              ${options(o.status || "pending")}
-            </select><td>
-            <button class="btn" type="button" onclick="saveOrderStatus('${o.id}')">저장</button>
-        </tr>;
-      }).join("");
-    }
+      tbody.innerHTML = filtered.map(o => {
+
+  const dt    = o.created_at ? new Date(o.created_at).toLocaleString() : "—";
+  const buyer = o.buyer_email || o.buyer_name || o.user_id || "—";
+  const item  = o.product_name || o.product_id || "—";
+  const phone = o.buyer_phone || "—";
+  const qty   = o.qty ?? "—";
+  const st    = o.status || "pending";
+
+  const postal = o.shipping_postal || "—";
+  const addr1  = o.shipping_address1 || "—";
+  const addr2  = o.shipping_address2 || "—";
+
+  return `
+    <tr>
+      <td>${escapeHtml(dt)}</td>
+
+      <td>${escapeHtml(buyer)}</td>
+
+      <td>${escapeHtml(item)}</td>
+
+      <td>${escapeHtml(phone)}</td>
+
+      <td>${escapeHtml(qty)}</td>
+
+      <td>${escapeHtml(st)}</td>
+
+      <td>${escapeHtml(postal)}</td>
+
+      <td>${escapeHtml(addr1)}</td>
+
+      <td>${escapeHtml(addr2)}</td>
+
+      <td>
+        <select 
+          class="input" 
+          data-order-status="${escapeHtml(o.id)}"
+          style="padding:8px 10px;"
+        >
+          ${options(st)}
+        </select>
+      </td>
+
+      <td>
+        <button 
+          class="btn" 
+          type="button"
+          onclick="saveOrderStatus('${o.id}')"
+        >
+          저장
+        </button>
+      </td>
+
+    </tr>
+  `;
+
+}).join("");
 
     // ✅ 너가 빠뜨렸던 핵심: loadOrders 정의
     async function loadOrders(){
