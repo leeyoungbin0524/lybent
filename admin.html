@@ -1109,14 +1109,14 @@ artistCancelBtn?.addEventListener("click", ()=>{ clearArtistForm(); setArtistMsg
           <td>${escapeHtml(item)}</td>
           <td>${escapeHtml(phone)}</td>
           <td>${escapeHtml(qty)}</td>
+          <td>${escapeHtml(st)}</td>
+          <td>${escapeHtml(addr || "—")}
+          <td>${escapeHtml(addr2 || "—")}
+          <td>${escapeHtml(addr3 || "—")}
           <td>
             <select class="input" data-order-status="${escapeHtml(o.id)}" style="padding:8px 10px;">
               ${options(o.status || "pending")}
             </select>
-          <td>${escapeHtml(st)}</td>
-          <td>${escapeHtml(addr || "—")}
-          <td>${escapeHtml(addr2 || "—")}
-          <td>${escapeHtml(addr3 || "—")}</td>
           <button class="btn" type="button" onclick="saveOrderStatus('${o.id}')">저장</button>
       </td>
         </tr>`;
