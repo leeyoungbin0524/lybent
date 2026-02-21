@@ -1144,6 +1144,34 @@ artistCancelBtn?.addEventListener("click", ()=>{ clearArtistForm(); setArtistMsg
       ordersData = data || [];
       renderOrders(ordersData);
     }
+    async function saveOrderStatus(orderId){
+  try{
+    setStatus("주문 상태 변경 중…");
+
+    const sel = document.querySelector(`[data-order-status="${orderId}"]`);
+    const nextStatus = sel?.value || "pending";
+
+    const { error } = await sb
+      .from("orders")
+      .update({ status: nextStatus })
+      .eq("id", orderId);
+
+    if(error){
+      alert("상태 변경 실패: " + error.message);
+      setStatus("❌ 상태 변경 실패");
+      return;
+    }
+
+    setStatus("✅ 상태 변경 완료");
+    // 화면 최신화
+    await loadOrders();
+  }catch(e){
+    console.error(e);
+    alert("예외: " + (e?.message || e));
+    setStatus("❌ 예외 발생");
+  }
+}
+window.saveOrderStatus = saveOrderStatus;
     
 
     // ---------- CSV / Logout ----------
