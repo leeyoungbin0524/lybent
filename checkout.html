@@ -7,7 +7,99 @@
   <link rel="icon" type="image/png" href="LYB로고 모음2.png">
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"/>
   <link rel="stylesheet" href="app.css">
+
+  <style>
+    /* checkout 전용 UI 보정 */
+    .checkout-grid{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:14px;
+      margin-top:14px;
+      align-items:start;
+    }
+    @media(max-width: 980px){
+      .checkout-grid{ grid-template-columns: 1fr; }
+    }
+
+    .section-title{
+      font-weight:900;
+      font-size:16px;
+      letter-spacing:-.01em;
+    }
+    .section-sub{
+      margin-top:6px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.6;
+    }
+
+    .form{
+      margin-top:12px;
+      display:grid;
+      gap:12px;
+    }
+    .row-2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media(max-width: 680px){
+      .row-2{ grid-template-columns: 1fr; }
+    }
+
+    .field{
+      display:grid;
+      gap:8px;
+    }
+    .label{
+      color:var(--muted);
+      font-size:12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+
+    /* input이 촌스러워 보이는 부분 개선 */
+    .input2{
+      width:100%;
+      box-sizing:border-box;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      outline:none;
+      transition: border-color .15s ease, background .15s ease;
+    }
+    .input2:focus{
+      border-color: rgba(255,255,255,.28);
+      background: rgba(255,255,255,.04);
+    }
+    .input2[readonly]{
+      opacity:.92;
+      cursor:not-allowed;
+    }
+    .btn2{
+      width:auto;
+      padding:12px 14px;
+      border-radius:14px;
+      font-weight:900;
+    }
+
+    .mini-note{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.6;
+    }
+
+    .price-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+  </style>
 </head>
+
 <body>
   <div class="topbar">
     <div class="topbar-left">
@@ -42,147 +134,144 @@
     </aside>
 
     <main class="main">
-  <div class="h-top">
-    <div class="pill">Checkout</div>
-    <div class="pill" id="clock">—</div>
-  </div>
+      <div class="h-top">
+        <div class="pill">Checkout</div>
+        <div class="pill" id="clock">—</div>
+      </div>
 
-  <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-top:6px;">
-    <div>
-      <h1 class="page-title" style="margin-bottom:6px;">주문/결제</h1>
-      <p class="page-sub" style="margin:0;">배송지와 연락처를 입력하고 주문을 생성하세요.</p>
-    </div>
-    <a href="goods.html" class="pill" style="text-decoration:none;">← 굿즈로</a>
-  </div>
-
-  <!-- 2열 레이아웃(모바일은 자동 1열) -->
-  <div style="display:grid;grid-template-columns: 1.2fr .8fr;gap:14px;margin-top:14px;">
-    <!-- 왼쪽: 입력 -->
-    <section class="card" style="border:1px solid var(--line);background:var(--panel);border-radius:18px;padding:16px;">
-      <div style="font-weight:900;font-size:16px;">배송 정보</div>
-      <div class="muted" style="margin-top:6px;">* 주소는 ‘주소 검색’으로 입력됩니다.</div>
-
-      <form id="checkoutForm"
-        style="margin-top:12px;display:grid;gap:10px;">
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <div style="display:grid;gap:8px;">
-            <div class="muted" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;">Name</div>
-            <input id="buyerName" class="input" placeholder="구매자 이름" required>
-          </div>
-          <div style="display:grid;gap:8px;">
-            <div class="muted" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;">Phone</div>
-            <input id="buyerPhone" class="input" placeholder="010-0000-0000" required>
-          </div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-top:6px;">
+        <div>
+          <h1 class="page-title" style="margin-bottom:6px;">주문/결제</h1>
+          <p class="page-sub" style="margin:0;">배송지와 연락처를 입력하고 주문을 생성하세요.</p>
         </div>
+        <a href="goods.html" class="pill" style="text-decoration:none;">← 굿즈로</a>
+      </div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <div style="display:grid;gap:8px;">
-            <div class="muted" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;">Quantity</div>
-            <input id="qty" class="input" type="number" min="1" value="1" required>
+      <div class="checkout-grid">
+        <!-- 왼쪽: 배송정보 -->
+        <section class="card" style="border:1px solid var(--line);background:var(--panel);border-radius:18px;padding:16px;">
+          <div class="section-title">배송 정보</div>
+          <div class="section-sub">주소는 “주소 검색”으로 입력됩니다.</div>
+
+          <form id="checkoutForm" class="form">
+            <div class="row-2">
+              <div class="field">
+                <div class="label">Name</div>
+                <input id="buyerName" class="input2" placeholder="구매자 이름" required>
+              </div>
+
+              <div class="field">
+                <div class="label">Phone</div>
+                <input id="buyerPhone" class="input2" placeholder="010-0000-0000" required>
+              </div>
+            </div>
+
+            <div class="row-2">
+              <div class="field">
+                <div class="label">Quantity</div>
+                <input id="qty" class="input2" type="number" min="1" value="1" required>
+              </div>
+
+              <div class="field">
+                <div class="label">Postal</div>
+                <div style="display:grid;grid-template-columns:1fr auto;gap:10px;">
+                  <input id="postal" class="input2" placeholder="우편번호" readonly>
+                  <button id="addrSearchBtn" class="btn btn2" type="button">주소 검색</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="label">Address</div>
+              <input id="addr1" class="input2" placeholder="기본주소" readonly>
+              <input id="addr2" class="input2" placeholder="상세주소 (동/호수 등)">
+              <div id="addrExtra" class="mini-note"></div>
+            </div>
+
+            <div class="field">
+              <div class="label">Memo</div>
+              <textarea id="memo" class="input2" placeholder="요청사항(선택)" style="min-height:110px;resize:vertical;"></textarea>
+            </div>
+
+            <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+              <button class="btn btn2" type="submit">주문 생성</button>
+              <div id="msg" class="pill" style="display:none;"></div>
+            </div>
+
+            <div class="mini-note">
+              주문 생성 후 결제 연동(카카오페이/토스 등)을 붙일 수 있어요.
+            </div>
+          </form>
+        </section>
+
+        <!-- 오른쪽: 상품 요약 -->
+        <aside class="card" style="border:1px solid var(--line);background:var(--panel);border-radius:18px;padding:16px;height:max-content;">
+          <div class="section-title">주문 상품</div>
+          <div id="productBox" style="margin-top:12px;">
+            <div style="font-weight:900;">상품 불러오는 중…</div>
           </div>
 
-          <div style="display:grid;gap:8px;">
-            <div class="muted" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;">Postal</div>
-            <div style="display:grid;grid-template-columns:1fr auto;gap:10px;">
-              <input id="postal" class="input" placeholder="우편번호" readonly>
-              <button id="addrSearchBtn" class="btn" type="button" style="width:auto;">주소 검색</button>
+          <div style="margin-top:12px;border-top:1px solid var(--line);padding-top:12px;display:grid;gap:8px;">
+            <div class="price-row">
+              <div class="muted">소계</div>
+              <div class="pill" id="sumPrice">—</div>
+            </div>
+            <div class="price-row">
+              <div class="muted">배송비</div>
+              <div class="pill">무료(임시)</div>
+            </div>
+            <div class="price-row">
+              <div style="font-weight:900;">총 결제금액</div>
+              <div class="pill" id="totalPrice" style="color:var(--text);border-color:rgba(255,255,255,.18);">—</div>
             </div>
           </div>
-        </div>
 
-        <div style="display:grid;gap:8px;">
-          <div class="muted" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;">Address</div>
-          <input id="addr1" class="input" placeholder="기본주소" readonly>
-          <input id="addr2" class="input" placeholder="상세주소 (동/호수 등)">
-          <div id="addrExtra" class="muted" style="font-size:12px;"></div>
-        </div>
-
-        <div style="display:grid;gap:8px;">
-          <div class="muted" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;">Memo</div>
-          <textarea id="memo" class="input" placeholder="요청사항(선택)" style="min-height:110px;"></textarea>
-        </div>
-
-        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:4px;">
-          <button class="btn" type="submit" style="width:auto;padding:12px 14px;border-radius:14px;font-weight:900;">
-            주문 생성
+          <button class="btn" type="button" disabled
+            style="width:100%;margin-top:12px;padding:12px 14px;border-radius:14px;font-weight:900;opacity:.6;cursor:not-allowed;">
+            결제 준비중
           </button>
-          <div id="msg" class="pill" style="display:none;"></div>
-        </div>
-
-        <div class="muted" style="font-size:12px;line-height:1.6;margin-top:6px;">
-          주문 생성 후 결제 연동(토스/카카오페이 등)을 붙일 수 있어요.
-        </div>
-      </form>
-    </section>
-
-    <!-- 오른쪽: 상품 요약 -->
-    <aside class="card" style="border:1px solid var(--line);background:var(--panel);border-radius:18px;padding:16px;height:max-content;">
-      <div style="font-weight:900;font-size:16px;">주문 상품</div>
-      <div id="productBox" style="margin-top:12px;">
-        <div style="font-weight:900;">상품 불러오는 중…</div>
+        </aside>
       </div>
-
-      <div style="margin-top:12px;border-top:1px solid var(--line);padding-top:12px;display:grid;gap:8px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <div class="muted">소계</div>
-          <div class="pill" id="sumPrice">—</div>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <div class="muted">배송비</div>
-          <div class="pill">무료(임시)</div>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <div style="font-weight:900;">총 결제금액</div>
-          <div class="pill" id="totalPrice" style="color:var(--text);border-color:rgba(255,255,255,.18);">—</div>
-        </div>
-      </div>
-
-      <button class="btn" type="button" disabled
-        style="width:100%;margin-top:12px;padding:12px 14px;border-radius:14px;font-weight:900;opacity:.6;cursor:not-allowed;">
-        결제 준비중
-      </button>
-    </aside>
+    </main>
   </div>
-</main>
 
   <script src="app.js"></script>
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script src="supabase-client.js"></script>
   <script src="auth-status.js"></script>
 
-  <!-- ✅ 카카오(다음) 우편번호 -->
+  <!-- ✅ 다음(카카오) 우편번호 -->
   <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
   <script>
-  const sb = window.supabaseClient;
+    const sb = window.supabaseClient;
 
-  function setMsg(t){
-    ...
-  }
-
-  const productId = new URLSearchParams(location.search).get("product_id");
-
-  async function requireLogin(){
-    ...
-  }
-
-  let product = null;
-
-  async function loadProduct(){
-    ...
-  }
-
-  document.getElementById("checkoutForm").addEventListener("submit", async (e)=>{
-    ...
-  });
-
-  window.addEventListener("DOMContentLoaded", async ()=>{
-    await loadProduct();
-  });
-</script>
+    function setMsg(t){
+      const el = document.getElementById("msg");
+      if(!el) return;
+      el.textContent = t || "";
+      el.style.display = t ? "inline-flex" : "none";
+    }
 
     const productId = new URLSearchParams(location.search).get("product_id");
+    let product = null;
+
+    function formatKRW(v){
+      const n = Number(v);
+      if(!Number.isFinite(n)) return "—";
+      return n.toLocaleString("ko-KR") + "원";
+    }
+
+    function updateTotals(){
+      const qty = Math.max(1, parseInt(document.getElementById("qty")?.value || "1", 10));
+      const price = Number(product?.price);
+      const sum = (Number.isFinite(price) ? price : 0) * qty;
+
+      const sumEl = document.getElementById("sumPrice");
+      const totalEl = document.getElementById("totalPrice");
+      if(sumEl) sumEl.textContent = Number.isFinite(price) ? formatKRW(sum) : "—";
+      if(totalEl) totalEl.textContent = Number.isFinite(price) ? formatKRW(sum) : "—";
+    }
 
     async function requireLogin(){
       const { data:{ user }, error } = await sb.auth.getUser();
@@ -206,23 +295,21 @@
           const baseAddr = data.roadAddress || data.jibunAddress || "";
           if(addr1El) addr1El.value = baseAddr;
 
-          // 참고항목 표시(법정동/건물명)
           let extra = "";
           if (data.bname && /[동|로|가]$/g.test(data.bname)) extra += data.bname;
           if (data.buildingName && data.apartment === "Y") extra += (extra ? ", " : "") + data.buildingName;
           extra = extra ? `참고: (${extra})` : "";
           if(extraEl) extraEl.textContent = extra;
 
-          // 상세주소 포커스
           if(addr2El) addr2El.focus();
         }
       }).open();
     }
 
-    let product = null;
-
     async function loadProduct(){
       const box = document.getElementById("productBox");
+      if(!box) return;
+
       if(!productId){
         box.innerHTML = `<div style="font-weight:900;">❌ 상품 정보가 없습니다.</div>`;
         return;
@@ -235,23 +322,31 @@
         .maybeSingle();
 
       if(error || !data){
-        box.innerHTML = `<div style="font-weight:900;">❌ 상품을 불러올 수 없음</div><div class="muted">${(error?.message||"")}</div>`;
+        box.innerHTML = `
+          <div style="font-weight:900;">❌ 상품을 불러올 수 없음</div>
+          <div class="muted">${(error?.message||"")}</div>
+        `;
         return;
       }
 
       product = data;
+
       box.innerHTML = `
         <div style="display:flex;gap:14px;align-items:flex-start;">
-          <div style="width:120px;height:120px;border-radius:16px;border:1px solid var(--line);overflow:hidden;background:rgba(255,255,255,.03);flex:0 0 auto;">
+          <div style="width:110px;height:110px;border-radius:16px;border:1px solid var(--line);overflow:hidden;background:rgba(255,255,255,.03);flex:0 0 auto;">
             ${product.image_url ? `<img src="${product.image_url}" style="width:100%;height:100%;object-fit:cover;">` : ``}
           </div>
-          <div style="flex:1;">
-            <div style="font-weight:900;font-size:18px;">${product.name}</div>
-            <div class="muted" style="margin-top:6px;">가격: ${product.price ?? "—"} / 재고: ${product.stock ?? "—"}</div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-weight:900;font-size:18px;line-height:1.25;">${product.name}</div>
+            <div class="muted" style="margin-top:6px;">
+              가격: ${product.price ?? "—"} / 재고: ${product.stock ?? "—"}
+            </div>
             <div class="muted" style="margin-top:8px;white-space:pre-wrap;">${product.description ?? ""}</div>
           </div>
         </div>
       `;
+
+      updateTotals();
     }
 
     document.getElementById("checkoutForm").addEventListener("submit", async (e)=>{
@@ -266,7 +361,6 @@
         return;
       }
 
-      // ✅ 주소 필수(원하면 풀어도 됨)
       const postal = (document.getElementById("postal").value || "").trim();
       const addr1 = (document.getElementById("addr1").value || "").trim();
       if(!postal || !addr1){
@@ -275,6 +369,7 @@
       }
 
       const qty = Math.max(1, parseInt(document.getElementById("qty").value || "1", 10));
+
       const payload = {
         user_id: user.id,
         status: "pending",
@@ -282,9 +377,11 @@
         product_name: product.name,
         price: product.price ?? null,
         qty,
+
         buyer_name: (document.getElementById("buyerName").value || "").trim(),
-        buyer_phone: (document.getElementById("buyerPhone").value || "").trim(),
+        buyer_phone: (document.getElementById("buyerPhone").value || "").trim(), // ⚠️ orders에 컬럼 있어야 함
         buyer_email: user.email || null,
+
         shipping_postal: postal,
         shipping_address1: addr1,
         shipping_address2: (document.getElementById("addr2").value || "").trim(),
@@ -301,9 +398,12 @@
     });
 
     window.addEventListener("DOMContentLoaded", async ()=>{
-      // 주소검색 버튼 연결
-      const btn = document.getElementById("addrSearchBtn");
-      if(btn) btn.addEventListener("click", openDaumPostcode);
+      // 주소검색 버튼
+      document.getElementById("addrSearchBtn")?.addEventListener("click", openDaumPostcode);
+
+      // 수량 변경 시 금액 업데이트
+      document.getElementById("qty")?.addEventListener("input", updateTotals);
+      document.getElementById("qty")?.addEventListener("change", updateTotals);
 
       await loadProduct();
     });
