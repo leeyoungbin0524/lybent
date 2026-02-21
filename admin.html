@@ -1084,6 +1084,7 @@ artistCancelBtn?.addEventListener("click", ()=>{ clearArtistForm(); setArtistMsg
         const dt = o.created_at ? new Date(o.created_at).toLocaleString() : "—";
         const buyer = (o.buyer_email || o.buyer_name || o.user_id || "—");
         const item = (o.product_name || o.product_id || "—");
+        const phone = (o.buyer_phone || "-");
         const qty = (o.qty ?? "—");
         const st = (o.status || "—");
         const addr = [o.shipping_postal, o.shipping_address1, o.shipping_address2].filter(Boolean).join(" ");
@@ -1091,6 +1092,7 @@ artistCancelBtn?.addEventListener("click", ()=>{ clearArtistForm(); setArtistMsg
           <td>${escapeHtml(dt)}</td>
           <td>${escapeHtml(buyer)}</td>
           <td>${escapeHtml(item)}</td>
+          <td>${escapeHtml(phone)}</td>
           <td>${escapeHtml(qty)}</td>
           <td>${escapeHtml(st)}</td>
           <td>${escapeHtml(addr || "—")}</td>
