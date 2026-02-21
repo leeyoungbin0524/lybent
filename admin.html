@@ -1071,15 +1071,28 @@ artistCancelBtn?.addEventListener("click", ()=>{ clearArtistForm(); setArtistMsg
 
     // ---------- Orders ----------
     function renderOrders(rows){
-      const status = document.getElementById("orderStatus")?.value || "";
-      const tbody = document.getElementById("ordersTbody");
-      if(!tbody) return;
+  const statusFilter = document.getElementById("orderStatus")?.value || "";
+  const tbody = document.getElementById("ordersTbody");
 
-      const filtered = status ? (rows || []).filter(r => r.status === status) : (rows || []);
-      if(!filtered.length){
-        tbody.innerHTML = `<tr><td colspan="6" style="color:var(--muted);">주문이 없습니다.</td></tr>`;
-        return;
-      }
+  const filtered = statusFilter
+    ? (rows || []).filter(r => r.status === statusFilter)
+    : (rows || []);
+
+  if(!filtered.length){
+    tbody.innerHTML = `<tr><td colspan="7" style="color:var(--muted);">주문이 없습니다.</td></tr>`;
+    return;
+  }
+
+  const options = (current) => ([
+    ["pending","pending"],
+    ["paid","paid"],
+    ["shipping","shipping"],
+    ["done","done"],
+    ["cancelled","cancelled"]
+  ].map(([v, label]) =>
+    `<option value="${v}" ${String(current)===v ? "selected" : ""}>${label}</option>`
+  ).join(""));
+      
       tbody.innerHTML = filtered.map(o=>{
         const dt = o.created_at ? new Date(o.created_at).toLocaleString() : "—";
         const buyer = (o.buyer_email || o.buyer_name || o.user_id || "—");
