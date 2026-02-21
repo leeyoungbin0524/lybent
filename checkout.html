@@ -155,14 +155,23 @@
   <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
   <script>
-    const sb = window.supabaseClient;
+  const sb = window.supabaseClient;
 
-    function setMsg(t){
-      const el = document.getElementById("msg");
-      if(!el) return;
-      el.textContent = t || "";
-      el.style.display = t ? "inline-flex" : "none";
-    }
+  function setMsg(t){
+    ...
+  }
+
+  const productId = new URLSearchParams(location.search).get("product_id");
+
+  async function requireLogin(){
+    ...
+  }
+
+  let product = null;
+
+  async function loadProduct(){
+    ...
+  }
 
     const productId = new URLSearchParams(location.search).get("product_id");
 
