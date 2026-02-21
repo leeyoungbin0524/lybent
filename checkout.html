@@ -173,6 +173,15 @@
     ...
   }
 
+  document.getElementById("checkoutForm").addEventListener("submit", async (e)=>{
+    ...
+  });
+
+  window.addEventListener("DOMContentLoaded", async ()=>{
+    await loadProduct();
+  });
+</script>
+
     const productId = new URLSearchParams(location.search).get("product_id");
 
     async function requireLogin(){
