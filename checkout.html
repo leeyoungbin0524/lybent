@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout | LYB</title>
+  <link rel="icon" type="image/png" href="LYB로고 모음2.png">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"/>
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-left">
+      <button class="iconbtn" onclick="openDrawer()">☰</button>
+      <a class="logo-link" href="index.html">
+        <img id="logo-mobile" class="logo" src="LYB LOGO FULL DARK.png" alt="LYB Logo">
+      </a>
+      <span class="pill" id="clock-m">—</span>
+      <span class="pill" id="authStatus">Auth: —</span>
+    </div>
+    <button class="iconbtn" onclick="toggleTheme()">Dark</button>
+  </div>
+
+  <div class="wrap">
+    <aside class="side">
+      <a class="logo-link" href="index.html">
+        <div class="logo-box">
+          <img id="logo-desktop" src="LYB LOGO FULL DARK.png" alt="LYB Logo">
+        </div>
+      </a>
+      <div class="nav">
+        <a href="index.html">Home</a>
+        <a href="artists.html">Artists</a>
+        <a href="news.html">News</a>
+        <a href="audition.html">Audition</a>
+        <a class="active" href="goods.html">Goods</a>
+      </div>
+      <div class="side-actions">
+        <button class="btn" onclick="toggleTheme()">Dark Mode</button>
+        <a class="btn" id="accountBtn" href="login.html" style="text-align:center;display:block;">Login</a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="h-top">
+        <div class="pill">Checkout</div>
+        <div class="pill" id="clock">—</div>
+      </div>
+
+      <h1 class="page-title">주문서</h1>
+      <p class="page-sub">주문 정보를 입력하면 주문이 생성됩니다. (결제 연동은 다음 단계)</p>
+
+      <div id="productBox" class="card" style="margin-top:14px;">
+        <div style="font-weight:900;">상품 불러오는 중…</div>
+      </div>
+
+      <form id="checkoutForm"
+        style="margin-top:14px;max-width:760px;border:1px solid var(--line);background:var(--panel);border-radius:18px;padding:18px;display:grid;gap:10px;">
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <input id="buyerName" class="input" placeholder="구매자 이름" required>
+          <input id="buyerPhone" class="input" placeholder="구매자 전화번호" required>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <input id="qty" class="input" type="number" min="1" value="1" required>
+          <input id="postal" class="input" placeholder="우편번호(선택)">
+        </div>
+
+        <input id="addr1" class="input" placeholder="주소(선택)">
+        <input id="addr2" class="input" placeholder="상세주소(선택)">
+        <textarea id="memo" class="input" placeholder="요청사항(선택)" style="min-height:110px;"></textarea>
+
+        <button class="btn" type="submit" style="width:max-content;">주문 생성</button>
+        <div id="msg" class="pill" style="display:none;"></div>
+      </form>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script src="auth-status.js"></script>
+
+  <script>
+    const sb = window.supabaseClient;
+
+    function setMsg(t){
+      const el = document.getElementById("msg");
+      if(!el) return;
+      el.textContent = t || "";
+      el.style.display = t ? "inline-flex" : "none";
+    }
+
+    const productId = new URLSearchParams(location.search).get("product_id");
+
+    async function requireLogin(){
+      const { data:{ user }, error } = await sb.auth.getUser();
+      if(error || !user){
+        location.href = `login.html?next=${encodeURIComponent("checkout.html" + location.search)}`;
+        return null;
+      }
+      return user;
+    }
+
+    let product = null;
+
+    async function loadProduct(){
+      const box = document.getElementById("productBox");
+      if(!productId){
+        box.innerHTML = `<div style="font-weight:900;">❌ 상품 정보가 없습니다.</div>`;
+        return;
+      }
+
+      const { data, error } = await sb
+        .from("products")
+        .select("id,name,price,stock,is_active,image_url,description")
+        .eq("id", productId)
+        .maybeSingle();
+
+      if(error || !data){
+        box.innerHTML = `<div style="font-weight:900;">❌ 상품을 불러올 수 없음</div><div class="muted">${(error?.message||"")}</div>`;
+        return;
+      }
+
+      product = data;
+      box.innerHTML = `
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:120px;height:120px;border-radius:16px;border:1px solid var(--line);overflow:hidden;background:rgba(255,255,255,.03);flex:0 0 auto;">
+            ${product.image_url ? `<img src="${product.image_url}" style="width:100%;height:100%;object-fit:cover;">` : ``}
+          </div>
+          <div style="flex:1;">
+            <div style="font-weight:900;font-size:18px;">${product.name}</div>
+            <div class="muted" style="margin-top:6px;">가격: ${product.price ?? "—"} / 재고: ${product.stock ?? "—"}</div>
+            <div class="muted" style="margin-top:8px;white-space:pre-wrap;">${product.description ?? ""}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    document.getElementById("checkoutForm").addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      setMsg("주문 생성 중…");
+
+      const user = await requireLogin();
+      if(!user) return;
+
+      if(!product){
+        setMsg("❌ 상품 로딩 실패");
+        return;
+      }
+
+      const qty = Math.max(1, parseInt(document.getElementById("qty").value || "1", 10));
+      const payload = {
+        user_id: user.id,
+        status: "pending",
+        product_id: product.id,
+        product_name: product.name,
+        price: product.price ?? null,
+        qty,
+        buyer_name: (document.getElementById("buyerName").value || "").trim(),
+        buyer_phone: (document.getElementById("buyerPhone").value || "").trim(),
+        buyer_email: user.email || null,
+        shipping_postal: (document.getElementById("postal").value || "").trim(),
+        shipping_address1: (document.getElementById("addr1").value || "").trim(),
+        shipping_address2: (document.getElementById("addr2").value || "").trim(),
+        memo: (document.getElementById("memo").value || "").trim(),
+      };
+
+      const { error } = await sb.from("orders").insert(payload);
+      if(error){
+        setMsg("❌ 주문 생성 실패: " + error.message);
+        return;
+      }
+
+      setMsg("✅ 주문이 생성됐습니다! (결제는 준비중)");
+    });
+
+    window.addEventListener("DOMContentLoaded", async ()=>{
+      await loadProduct();
+    });
+  </script>
+</body>
+</html>
