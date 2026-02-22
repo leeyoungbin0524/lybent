@@ -1114,7 +1114,7 @@
 
       tbody.innerHTML = filtered.map(o => {
         const dt     = o.created_at ? new Date(o.created_at).toLocaleString() : "—";
-        const buyer  = o.user_id || "—";
+        const buyer  = o.buyer_name || o.user_id || "—";
         const item   = o.product_name || o.product_id || "—";
         const phone  = o.buyer_phone || "—";
         const qty    = o.qty ?? "—";
