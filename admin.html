@@ -182,7 +182,7 @@
       overflow:hidden;
     }
     table{ width:100%; border-collapse:collapse; }
-    th, td{ padding:10px 12px; border-bottom:1px solid var(--line); text-align:left; font-size:13px; }
+    th, td{ padding:10px 12px; border-bottom:1px solid var(--line); text-align:left; font-size:13px; vertical-align:top; }
     th{ color:var(--muted); font-weight:800; background:rgba(255,255,255,.02); }
     tr:hover td{ background:rgba(255,255,255,.02); }
 
@@ -234,7 +234,7 @@
         <button class="navItem" data-view="stats" type="button">
           <span class="ico">📊</span><span>통계</span>
         </button>
-         <button class="navItem" data-view="artists" type="button">
+        <button class="navItem" data-view="artists" type="button">
           <span class="ico">🎤</span><span>아티스트</span>
         </button>
         <button class="navItem" data-view="goods" type="button">
@@ -302,62 +302,64 @@
             <div class="card"><div class="statK">기타</div><div class="statV" id="statEtc">—</div></div>
           </div>
         </section>
+
+        <!-- Artists -->
         <section class="view" id="view-artists" hidden>
-  <div class="title">아티스트</div>
-  <div class="sub">artists 테이블을 조회/등록/수정합니다.</div>
+          <div class="title">아티스트</div>
+          <div class="sub">artists 테이블을 조회/등록/수정합니다.</div>
 
-  <div class="card" style="margin-top:12px;">
-    <div style="font-weight:900;margin-bottom:10px;">아티스트 등록 / 수정</div>
+          <div class="card" style="margin-top:12px;">
+            <div style="font-weight:900;margin-bottom:10px;">아티스트 등록 / 수정</div>
 
-    <form id="artistForm" style="display:grid;gap:10px;grid-template-columns:1fr 1fr;">
-      <input id="artistName" class="input" placeholder="이름 (필수)" required style="grid-column:1 / -1;">
-      <input id="artistRole" class="input" placeholder="포지션/설명 (예: Vocal, Actor)">
-      <input id="artistSort" class="input" placeholder="정렬(숫자, 작을수록 위)" type="number" value="0">
+            <form id="artistForm" style="display:grid;gap:10px;grid-template-columns:1fr 1fr;">
+              <input id="artistName" class="input" placeholder="이름 (필수)" required style="grid-column:1 / -1;">
+              <input id="artistRole" class="input" placeholder="포지션/설명 (예: Vocal, Actor)">
+              <input id="artistSort" class="input" placeholder="정렬(숫자, 작을수록 위)" type="number" value="0">
 
-      <select id="artistActive" class="input">
-        <option value="true">활성</option>
-        <option value="false">비활성</option>
-      </select>
+              <select id="artistActive" class="input">
+                <option value="true">활성</option>
+                <option value="false">비활성</option>
+              </select>
 
-      <input id="artistEditId" type="hidden" value="">
+              <input id="artistEditId" type="hidden" value="">
 
-      <input id="artistImageUrl" class="input" placeholder="이미지 URL (선택)" style="grid-column:1 / -1;">
-      <input id="artistImageFile" class="input" type="file" accept="image/*" style="grid-column:1 / -1;">
+              <input id="artistImageUrl" class="input" placeholder="이미지 URL (선택)" style="grid-column:1 / -1;">
+              <input id="artistImageFile" class="input" type="file" accept="image/*" style="grid-column:1 / -1;">
 
-      <textarea id="artistBio" class="input" placeholder="소개(선택)"
-        style="grid-column:1 / -1; min-height:110px;"></textarea>
+              <textarea id="artistBio" class="input" placeholder="소개(선택)"
+                style="grid-column:1 / -1; min-height:110px;"></textarea>
 
-      <button id="artistSaveBtn" class="btn" type="submit" style="width:max-content;">등록 / 저장</button>
-      <button id="artistCancelBtn" class="btn" type="button" style="width:max-content; display:none;">수정 취소</button>
+              <button id="artistSaveBtn" class="btn" type="submit" style="width:max-content;">등록 / 저장</button>
+              <button id="artistCancelBtn" class="btn" type="button" style="width:max-content; display:none;">수정 취소</button>
 
-      <div class="muted" style="grid-column:1 / -1;">
-        ※ 등록하면 artists.html에 자동 표시됩니다(활성 아티스트 기준).
-      </div>
-    </form>
+              <div class="muted" style="grid-column:1 / -1;">
+                ※ 등록하면 artists.html에 자동 표시됩니다(활성 아티스트 기준).
+              </div>
+            </form>
 
-    <div class="pill" id="artistMsg" style="margin-top:10px;display:none;"></div>
-  </div>
+            <div class="pill" id="artistMsg" style="margin-top:10px;display:none;"></div>
+          </div>
 
-  <div class="toolbar" style="margin-top:12px;">
-    <input id="artistSearch" class="input" placeholder="이름 검색" />
-    <button id="artistRefreshBtn" class="btn" type="button">새로고침</button>
-  </div>
+          <div class="toolbar" style="margin-top:12px;">
+            <input id="artistSearch" class="input" placeholder="이름 검색" />
+            <button id="artistRefreshBtn" class="btn" type="button">새로고침</button>
+          </div>
 
-  <div class="tableWrap">
-    <table>
-      <thead>
-        <tr>
-          <th>이름</th><th>역할</th><th>정렬</th><th>상태</th><th>관리</th>
-        </tr>
-      </thead>
-      <tbody id="artistTbody">
-        <tr><td colspan="5" style="color:var(--muted);">불러오는 중…</td></tr>
-      </tbody>
-    </table>
-  </div>
+          <div class="tableWrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>이름</th><th>역할</th><th>정렬</th><th>상태</th><th>관리</th>
+                </tr>
+              </thead>
+              <tbody id="artistTbody">
+                <tr><td colspan="5" style="color:var(--muted);">불러오는 중…</td></tr>
+              </tbody>
+            </table>
+          </div>
 
-  <div class="pill" style="margin-top:12px;">※ Storage 버킷: <b>artist-images</b> 생성 필요(파일 업로드 쓸 때)</div>
-</section>
+          <div class="pill" style="margin-top:12px;">※ Storage 버킷: <b>artist-images</b> 생성 필요(파일 업로드 쓸 때)</div>
+        </section>
 
         <!-- Goods -->
         <section class="view" id="view-goods" hidden>
@@ -423,15 +425,16 @@
         <!-- Shipping -->
         <section class="view" id="view-shipping" hidden>
           <div class="title">주문/배송</div>
-          <div class="sub">orders 테이블을 조회합니다.</div>
+          <div class="sub">orders 테이블을 조회하고, 상태를 변경합니다. (DB 값은 영어 저장 / 화면은 한글 표시)</div>
 
           <div class="toolbar">
             <select id="orderStatus" class="input">
               <option value="">전체 상태</option>
-              <option value="pending">pending</option>
-              <option value="paid">paid</option>
-              <option value="shipping">shipping</option>
-              <option value="done">done</option>
+              <option value="pending">주문접수</option>
+              <option value="paid">결제완료</option>
+              <option value="shipping">배송중</option>
+              <option value="done">배송완료</option>
+              <option value="cancelled">취소됨</option>
             </select>
             <button id="ordersRefreshBtn" class="btn" type="button">새로고침</button>
           </div>
@@ -439,22 +442,22 @@
           <div class="tableWrap">
             <table>
               <thead>
-<tr>
-  <th>날짜</th>
-  <th>구매자</th>
-  <th>상품</th>
-  <th>전화번호</th>
-  <th>수량</th>
-  <th>상태</th>
-  <th>우편번호</th>
-  <th>주소</th>
-  <th>상세주소</th>
-  <th>상태변경</th>
-  <th>저장</th>
-</tr>
-</thead>
+                <tr>
+                  <th>날짜</th>
+                  <th>구매자</th>
+                  <th>상품</th>
+                  <th>전화번호</th>
+                  <th>수량</th>
+                  <th>상태</th>
+                  <th>우편번호</th>
+                  <th>주소</th>
+                  <th>상세주소</th>
+                  <th>상태변경</th>
+                  <th>저장</th>
+                </tr>
+              </thead>
               <tbody id="ordersTbody">
-                <tr><td colspan="6" style="color:var(--muted);">불러오는 중…</td></tr>
+                <tr><td colspan="11" style="color:var(--muted);">불러오는 중…</td></tr>
               </tbody>
             </table>
           </div>
@@ -518,19 +521,20 @@
     const sidebar = document.getElementById("sidebar");
     const overlay = document.getElementById("overlay");
     function openSidebar(){
-      sidebar.classList.add("open");
-      overlay.classList.add("show");
-      overlay.setAttribute("aria-hidden","false");
+      sidebar?.classList.add("open");
+      overlay?.classList.add("show");
+      overlay?.setAttribute("aria-hidden","false");
     }
     function closeSidebar(){
-      sidebar.classList.remove("open");
-      overlay.classList.remove("show");
-      overlay.setAttribute("aria-hidden","true");
+      sidebar?.classList.remove("open");
+      overlay?.classList.remove("show");
+      overlay?.setAttribute("aria-hidden","true");
     }
 
     let auditionData = [];
     let goodsData = [];
     let ordersData = [];
+    let artistsData = [];
 
     async function requireLogin(){
       const { data: { user }, error } = await sb.auth.getUser();
@@ -566,7 +570,7 @@
       closeSidebar();
 
       if(view === "artists") loadArtists();
-      if(view === "goods") loadGoods();     // 들어갈 때마다 최신화
+      if(view === "goods") loadGoods();
       if(view === "shipping") loadOrders(); // ✅ 항상 로드
     }
 
@@ -635,220 +639,215 @@
     }
     window.deleteApplicant = deleteApplicant;
 
-    // ---------- Artists (CRUD + Image Upload + Edit) ----------
-let artistsData = [];
+    // ---------- Artists ----------
+    const ARTIST_IMAGE_BUCKET = "artist-images";
+    const artistForm = document.getElementById("artistForm");
+    const artistMsg = document.getElementById("artistMsg");
+    const artistEditIdEl = document.getElementById("artistEditId");
+    const artistCancelBtn = document.getElementById("artistCancelBtn");
 
-const ARTIST_IMAGE_BUCKET = "artist-images";
-
-const artistForm = document.getElementById("artistForm");
-const artistMsg = document.getElementById("artistMsg");
-const artistEditIdEl = document.getElementById("artistEditId");
-const artistCancelBtn = document.getElementById("artistCancelBtn");
-
-function setArtistMsg(t){
-  if(!artistMsg) return;
-  artistMsg.textContent = t || "";
-  artistMsg.style.display = t ? "inline-flex" : "none";
-}
-
-function clearArtistForm(){
-  ["artistName","artistRole","artistSort","artistBio","artistImageUrl"].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) el.value = (id === "artistSort") ? "0" : "";
-  });
-  const act = document.getElementById("artistActive");
-  if(act) act.value = "true";
-  const fileEl = document.getElementById("artistImageFile");
-  if(fileEl) fileEl.value = "";
-  if(artistEditIdEl) artistEditIdEl.value = "";
-  if(artistCancelBtn) artistCancelBtn.style.display = "none";
-  const btn = document.getElementById("artistSaveBtn");
-  if(btn) btn.textContent = "등록 / 저장";
-}
-
-function enterArtistEditMode(a){
-  document.getElementById("artistName").value = a.name || "";
-  document.getElementById("artistRole").value = a.role || "";
-  document.getElementById("artistSort").value = (a.sort_order ?? 0);
-  document.getElementById("artistActive").value = (a.is_active === false) ? "false" : "true";
-  document.getElementById("artistImageUrl").value = a.image_url || "";
-  document.getElementById("artistBio").value = a.bio || "";
-  if(artistEditIdEl) artistEditIdEl.value = a.id;
-  if(artistCancelBtn) artistCancelBtn.style.display = "inline-flex";
-  const btn = document.getElementById("artistSaveBtn");
-  if(btn) btn.textContent = "수정 저장";
-  setArtistMsg("수정 모드: 값 바꾸고 '수정 저장' 누르기");
-}
-
-window.editArtist = function(id){
-  const a = (artistsData || []).find(x => x.id === id);
-  if(!a) return;
-  enterArtistEditMode(a);
-  artistForm?.scrollIntoView({ behavior:"smooth", block:"start" });
-};
-
-function renderArtists(rows){
-  const q = (document.getElementById("artistSearch")?.value || "").toLowerCase();
-  const tbody = document.getElementById("artistTbody");
-  if(!tbody) return;
-
-  const filtered = (rows || []).filter(r => (r.name || "").toLowerCase().includes(q));
-
-  if(!filtered.length){
-    tbody.innerHTML = `<tr><td colspan="5" style="color:var(--muted);">아티스트가 없습니다.</td></tr>`;
-    return;
-  }
-
-  tbody.innerHTML = filtered.map(a=>{
-    const active = (a.is_active === false) ? "비활성" : "활성";
-    const thumb = a.image_url
-      ? `<img src="${escapeHtml(a.image_url)}" alt="img"
-            style="width:42px;height:42px;object-fit:cover;border-radius:10px;border:1px solid var(--line);" />`
-      : "";
-    const imgLink = a.image_url
-      ? `<a class="pill" href="${escapeHtml(a.image_url)}" target="_blank" rel="noreferrer" style="padding:4px 8px;">이미지</a>`
-      : "";
-
-    return `<tr>
-      <td>${escapeHtml(a.name || "")}</td>
-      <td>${escapeHtml(a.role || "")}</td>
-      <td>${escapeHtml(a.sort_order ?? 0)}</td>
-      <td>${escapeHtml(active)}</td>
-      <td style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-        ${thumb}
-        ${imgLink}
-        <button type="button" class="btn" onclick="editArtist('${a.id}')">수정</button>
-        <button type="button" class="danger" onclick="deleteArtist('${a.id}')">삭제</button>
-      </td>
-    </tr>`;
-  }).join("");
-}
-
-async function loadArtists(){
-  const tbody = document.getElementById("artistTbody");
-  if(tbody) tbody.innerHTML = `<tr><td colspan="5" style="color:var(--muted);">불러오는 중…</td></tr>`;
-
-  const { data, error } = await sb
-    .from("artists")
-    .select("id, created_at, name, role, bio, image_url, is_active, sort_order")
-    .order("sort_order", { ascending:true })
-    .order("created_at", { ascending:false });
-
-  if(error){
-    if(tbody) tbody.innerHTML = `<tr><td colspan="5" style="color:var(--muted);">artists 조회 실패: ${escapeHtml(error.message)}</td></tr>`;
-    artistsData = [];
-    return;
-  }
-
-  artistsData = data || [];
-  renderArtists(artistsData);
-}
-
-async function saveArtist(e){
-  e?.preventDefault();
-  setArtistMsg("저장 중…");
-  setStatus("아티스트 저장 중…");
-
-  const { data:{ session }, error:sessErr } = await sb.auth.getSession();
-  if(sessErr || !session?.user){
-    setArtistMsg("❌ 로그인 필요/세션 오류");
-    setStatus("❌ 세션 오류");
-    return;
-  }
-
-  const name = (document.getElementById("artistName")?.value || "").trim();
-  const role = (document.getElementById("artistRole")?.value || "").trim();
-  const sort_order = Number(document.getElementById("artistSort")?.value || 0) || 0;
-  const bio = (document.getElementById("artistBio")?.value || "").trim();
-  const is_active = (document.getElementById("artistActive")?.value === "true");
-
-  const imageUrlInput = (document.getElementById("artistImageUrl")?.value || "").trim();
-  const fileEl = document.getElementById("artistImageFile");
-  const file = fileEl?.files?.[0] || null;
-
-  if(!name){
-    setArtistMsg("❌ 이름은 필수입니다.");
-    setStatus("❌ 이름 필요");
-    return;
-  }
-
-  let finalImageUrl = imageUrlInput;
-
-  if(file){
-    setArtistMsg("이미지 업로드 중…");
-
-    const safeName = (name || "artist").toLowerCase().replace(/[^a-z0-9\-_.]/g, "-");
-    const ext = (file.name.split(".").pop() || "png").toLowerCase();
-    const path = `${Date.now()}_${safeName}.${ext}`;
-
-    const { error: upErr } = await sb.storage
-      .from(ARTIST_IMAGE_BUCKET)
-      .upload(path, file, { upsert:true, cacheControl:"3600", contentType:file.type || undefined });
-
-    if(upErr){
-      setArtistMsg("❌ 이미지 업로드 실패: " + upErr.message);
-      setStatus("❌ 업로드 실패");
-      return;
+    function setArtistMsg(t){
+      if(!artistMsg) return;
+      artistMsg.textContent = t || "";
+      artistMsg.style.display = t ? "inline-flex" : "none";
     }
 
-    const { data: pub } = sb.storage.from(ARTIST_IMAGE_BUCKET).getPublicUrl(path);
-    finalImageUrl = pub?.publicUrl || "";
-  }
-
-  const payload = { name, is_active, sort_order };
-  if(role) payload.role = role;
-  if(bio) payload.bio = bio;
-  if(finalImageUrl) payload.image_url = finalImageUrl;
-
-  const editingId = (artistEditIdEl?.value || "").trim();
-
-  if(editingId){
-    const { error } = await sb.from("artists").update(payload).eq("id", editingId);
-    if(error){
-      setArtistMsg("❌ 수정 실패: " + error.message);
-      setStatus("❌ 수정 실패");
-      return;
+    function clearArtistForm(){
+      ["artistName","artistRole","artistSort","artistBio","artistImageUrl"].forEach(id=>{
+        const el = document.getElementById(id);
+        if(el) el.value = (id === "artistSort") ? "0" : "";
+      });
+      const act = document.getElementById("artistActive");
+      if(act) act.value = "true";
+      const fileEl = document.getElementById("artistImageFile");
+      if(fileEl) fileEl.value = "";
+      if(artistEditIdEl) artistEditIdEl.value = "";
+      if(artistCancelBtn) artistCancelBtn.style.display = "none";
+      const btn = document.getElementById("artistSaveBtn");
+      if(btn) btn.textContent = "등록 / 저장";
     }
-    setArtistMsg("✅ 수정 완료");
-    setStatus("✅ 수정 완료");
-  } else {
-    const { error } = await sb.from("artists").insert(payload);
-    if(error){
-      setArtistMsg("❌ 등록 실패: " + error.message);
-      setStatus("❌ 등록 실패");
-      return;
+
+    function enterArtistEditMode(a){
+      document.getElementById("artistName").value = a.name || "";
+      document.getElementById("artistRole").value = a.role || "";
+      document.getElementById("artistSort").value = (a.sort_order ?? 0);
+      document.getElementById("artistActive").value = (a.is_active === false) ? "false" : "true";
+      document.getElementById("artistImageUrl").value = a.image_url || "";
+      document.getElementById("artistBio").value = a.bio || "";
+      if(artistEditIdEl) artistEditIdEl.value = a.id;
+      if(artistCancelBtn) artistCancelBtn.style.display = "inline-flex";
+      const btn = document.getElementById("artistSaveBtn");
+      if(btn) btn.textContent = "수정 저장";
+      setArtistMsg("수정 모드: 값 바꾸고 '수정 저장' 누르기");
     }
-    setArtistMsg("✅ 등록 완료");
-    setStatus("✅ 등록 완료");
-  }
 
-  clearArtistForm();
-  await loadArtists();
-}
+    window.editArtist = function(id){
+      const a = (artistsData || []).find(x => x.id === id);
+      if(!a) return;
+      enterArtistEditMode(a);
+      artistForm?.scrollIntoView({ behavior:"smooth", block:"start" });
+    };
 
-async function deleteArtist(id){
-  if(!confirm("정말 삭제하시겠습니까?")) return;
-  setArtistMsg("삭제 중…");
-  const { error } = await sb.from("artists").delete().eq("id", id);
-  if(error){
-    setArtistMsg("❌ 삭제 실패: " + error.message);
-    return;
-  }
-  setArtistMsg("✅ 삭제 완료");
-  await loadArtists();
-}
-window.deleteArtist = deleteArtist;
+    function renderArtists(rows){
+      const q = (document.getElementById("artistSearch")?.value || "").toLowerCase();
+      const tbody = document.getElementById("artistTbody");
+      if(!tbody) return;
 
-artistForm?.addEventListener("submit", saveArtist);
-artistCancelBtn?.addEventListener("click", ()=>{ clearArtistForm(); setArtistMsg(""); });
+      const filtered = (rows || []).filter(r => (r.name || "").toLowerCase().includes(q));
 
-    // ---------- Goods (CRUD + Image Upload + Edit) ----------
+      if(!filtered.length){
+        tbody.innerHTML = `<tr><td colspan="5" style="color:var(--muted);">아티스트가 없습니다.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(a=>{
+        const active = (a.is_active === false) ? "비활성" : "활성";
+        const thumb = a.image_url
+          ? `<img src="${escapeHtml(a.image_url)}" alt="img"
+                style="width:42px;height:42px;object-fit:cover;border-radius:10px;border:1px solid var(--line);" />`
+          : "";
+        const imgLink = a.image_url
+          ? `<a class="pill" href="${escapeHtml(a.image_url)}" target="_blank" rel="noreferrer" style="padding:4px 8px;">이미지</a>`
+          : "";
+
+        return `<tr>
+          <td>${escapeHtml(a.name || "")}</td>
+          <td>${escapeHtml(a.role || "")}</td>
+          <td>${escapeHtml(a.sort_order ?? 0)}</td>
+          <td>${escapeHtml(active)}</td>
+          <td style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            ${thumb}
+            ${imgLink}
+            <button type="button" class="btn" onclick="editArtist('${a.id}')">수정</button>
+            <button type="button" class="danger" onclick="deleteArtist('${a.id}')">삭제</button>
+          </td>
+        </tr>`;
+      }).join("");
+    }
+
+    async function loadArtists(){
+      const tbody = document.getElementById("artistTbody");
+      if(tbody) tbody.innerHTML = `<tr><td colspan="5" style="color:var(--muted);">불러오는 중…</td></tr>`;
+
+      const { data, error } = await sb
+        .from("artists")
+        .select("id, created_at, name, role, bio, image_url, is_active, sort_order")
+        .order("sort_order", { ascending:true })
+        .order("created_at", { ascending:false });
+
+      if(error){
+        if(tbody) tbody.innerHTML = `<tr><td colspan="5" style="color:var(--muted);">artists 조회 실패: ${escapeHtml(error.message)}</td></tr>`;
+        artistsData = [];
+        return;
+      }
+
+      artistsData = data || [];
+      renderArtists(artistsData);
+    }
+
+    async function saveArtist(e){
+      e?.preventDefault();
+      setArtistMsg("저장 중…");
+      setStatus("아티스트 저장 중…");
+
+      const { data:{ session }, error:sessErr } = await sb.auth.getSession();
+      if(sessErr || !session?.user){
+        setArtistMsg("❌ 로그인 필요/세션 오류");
+        setStatus("❌ 세션 오류");
+        return;
+      }
+
+      const name = (document.getElementById("artistName")?.value || "").trim();
+      const role = (document.getElementById("artistRole")?.value || "").trim();
+      const sort_order = Number(document.getElementById("artistSort")?.value || 0) || 0;
+      const bio = (document.getElementById("artistBio")?.value || "").trim();
+      const is_active = (document.getElementById("artistActive")?.value === "true");
+
+      const imageUrlInput = (document.getElementById("artistImageUrl")?.value || "").trim();
+      const fileEl = document.getElementById("artistImageFile");
+      const file = fileEl?.files?.[0] || null;
+
+      if(!name){
+        setArtistMsg("❌ 이름은 필수입니다.");
+        setStatus("❌ 이름 필요");
+        return;
+      }
+
+      let finalImageUrl = imageUrlInput;
+
+      if(file){
+        setArtistMsg("이미지 업로드 중…");
+
+        const safeName = (name || "artist").toLowerCase().replace(/[^a-z0-9\-_.]/g, "-");
+        const ext = (file.name.split(".").pop() || "png").toLowerCase();
+        const path = `${Date.now()}_${safeName}.${ext}`;
+
+        const { error: upErr } = await sb.storage
+          .from(ARTIST_IMAGE_BUCKET)
+          .upload(path, file, { upsert:true, cacheControl:"3600", contentType:file.type || undefined });
+
+        if(upErr){
+          setArtistMsg("❌ 이미지 업로드 실패: " + upErr.message);
+          setStatus("❌ 업로드 실패");
+          return;
+        }
+
+        const { data: pub } = sb.storage.from(ARTIST_IMAGE_BUCKET).getPublicUrl(path);
+        finalImageUrl = pub?.publicUrl || "";
+      }
+
+      const payload = { name, is_active, sort_order };
+      if(role) payload.role = role;
+      if(bio) payload.bio = bio;
+      if(finalImageUrl) payload.image_url = finalImageUrl;
+
+      const editingId = (artistEditIdEl?.value || "").trim();
+
+      if(editingId){
+        const { error } = await sb.from("artists").update(payload).eq("id", editingId);
+        if(error){
+          setArtistMsg("❌ 수정 실패: " + error.message);
+          setStatus("❌ 수정 실패");
+          return;
+        }
+        setArtistMsg("✅ 수정 완료");
+        setStatus("✅ 수정 완료");
+      } else {
+        const { error } = await sb.from("artists").insert(payload);
+        if(error){
+          setArtistMsg("❌ 등록 실패: " + error.message);
+          setStatus("❌ 등록 실패");
+          return;
+        }
+        setArtistMsg("✅ 등록 완료");
+        setStatus("✅ 등록 완료");
+      }
+
+      clearArtistForm();
+      await loadArtists();
+    }
+
+    async function deleteArtist(id){
+      if(!confirm("정말 삭제하시겠습니까?")) return;
+      setArtistMsg("삭제 중…");
+      const { error } = await sb.from("artists").delete().eq("id", id);
+      if(error){
+        setArtistMsg("❌ 삭제 실패: " + error.message);
+        return;
+      }
+      setArtistMsg("✅ 삭제 완료");
+      await loadArtists();
+    }
+    window.deleteArtist = deleteArtist;
+
+    artistForm?.addEventListener("submit", saveArtist);
+    artistCancelBtn?.addEventListener("click", ()=>{ clearArtistForm(); setArtistMsg(""); });
+
+    // ---------- Goods ----------
     const goodsForm = document.getElementById("goodsCreateForm");
     const goodsMsg = document.getElementById("goodsCreateMsg");
     const editGoodsIdEl = document.getElementById("editGoodsId");
     const cancelEditBtn = document.getElementById("goodsCancelBtn");
-
-    // ✅ Supabase Storage 버킷명 (대시보드에서 생성 필요)
     const PRODUCT_IMAGE_BUCKET = "product-images";
 
     function setGoodsMsg(t){
@@ -1005,7 +1004,6 @@ artistCancelBtn?.addEventListener("click", ()=>{ clearArtistForm(); setArtistMsg
 
       let finalImageUrl = imageUrlInput;
 
-      // 파일 업로드 있으면 storage 업로드
       if(file){
         setGoodsMsg("이미지 업로드 중…");
 
@@ -1082,93 +1080,80 @@ artistCancelBtn?.addEventListener("click", ()=>{ clearArtistForm(); setArtistMsg
     });
 
     // ---------- Orders ----------
+    function statusLabel(status){
+      const map = {
+        pending: "주문접수",
+        paid: "결제완료",
+        shipping: "배송중",
+        done: "배송완료",
+        cancelled: "취소됨"
+      };
+      return map[status] || status || "—";
+    }
+
+    function statusOptions(current){
+      const list = ["pending","paid","shipping","done","cancelled"];
+      return list.map(v =>
+        `<option value="${v}" ${String(current)===v ? "selected" : ""}>${statusLabel(v)}</option>`
+      ).join("");
+    }
+
     function renderOrders(rows){
-  const statusFilter = document.getElementById("orderStatus")?.value || "";
-  const tbody = document.getElementById("ordersTbody");
+      const statusFilter = document.getElementById("orderStatus")?.value || "";
+      const tbody = document.getElementById("ordersTbody");
+      if(!tbody) return;
 
-  const filtered = statusFilter
-    ? (rows || []).filter(r => r.status === statusFilter)
-    : (rows || []);
+      const filtered = statusFilter
+        ? (rows || []).filter(r => r.status === statusFilter)
+        : (rows || []);
 
-  if(!filtered.length){
-    tbody.innerHTML = `<tr><td colspan="7" style="color:var(--muted);">주문이 없습니다.</td></tr>`;
-    return;
-  }
+      if(!filtered.length){
+        tbody.innerHTML = `<tr><td colspan="11" style="color:var(--muted);">주문이 없습니다.</td></tr>`;
+        return;
+      }
 
-  const options = (current) => ([
-    ["pending","pending"],
-    ["paid","paid"],
-    ["shipping","shipping"],
-    ["done","done"],
-    ["cancelled","cancelled"]
-  ].map(([v, label]) =>
-    `<option value="${v}" ${String(current)===v ? "selected" : ""}>${label}</option>`
-  ).join(""));
-      
       tbody.innerHTML = filtered.map(o => {
+        const dt     = o.created_at ? new Date(o.created_at).toLocaleString() : "—";
+        const buyer  = o.buyer_email || o.buyer_name || o.user_id || "—";
+        const item   = o.product_name || o.product_id || "—";
+        const phone  = o.buyer_phone || "—";
+        const qty    = o.qty ?? "—";
+        const stKey  = o.status || "pending";
+        const stText = statusLabel(stKey);
 
-  const dt    = o.created_at ? new Date(o.created_at).toLocaleString() : "—";
-  const buyer = o.buyer_email || o.buyer_name || o.user_id || "—";
-  const item  = o.product_name || o.product_id || "—";
-  const phone = o.buyer_phone || "—";
-  const qty   = o.qty ?? "—";
-  const st    = o.status || "pending";
+        const postal = o.shipping_postal || "—";
+        const addr1  = o.shipping_address1 || "—";
+        const addr2  = o.shipping_address2 || "—";
 
-  const postal = o.shipping_postal || "—";
-  const addr1  = o.shipping_address1 || "—";
-  const addr2  = o.shipping_address2 || "—";
+        return `
+          <tr>
+            <td>${escapeHtml(dt)}</td>
+            <td>${escapeHtml(buyer)}</td>
+            <td>${escapeHtml(item)}</td>
+            <td>${escapeHtml(phone)}</td>
+            <td>${escapeHtml(qty)}</td>
+            <td>${escapeHtml(stText)}</td>
+            <td>${escapeHtml(postal)}</td>
+            <td>${escapeHtml(addr1)}</td>
+            <td>${escapeHtml(addr2)}</td>
+            <td>
+              <select class="input" data-order-status="${escapeHtml(o.id)}" style="padding:8px 10px;">
+                ${statusOptions(stKey)}
+              </select>
+            </td>
+            <td>
+              <button class="btn" type="button" onclick="saveOrderStatus('${o.id}')">저장</button>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
 
-  return `
-    <tr>
-      <td>${escapeHtml(dt)}</td>
-
-      <td>${escapeHtml(buyer)}</td>
-
-      <td>${escapeHtml(item)}</td>
-
-      <td>${escapeHtml(phone)}</td>
-
-      <td>${escapeHtml(qty)}</td>
-
-      <td>${escapeHtml(st)}</td>
-
-      <td>${escapeHtml(postal)}</td>
-
-      <td>${escapeHtml(addr1)}</td>
-
-      <td>${escapeHtml(addr2)}</td>
-
-      <td>
-        <select 
-          class="input" 
-          data-order-status="${escapeHtml(o.id)}"
-          style="padding:8px 10px;"
-        >
-          ${options(st)}
-        </select>
-      </td>
-
-      <td>
-        <button 
-          class="btn" 
-          type="button"
-          onclick="saveOrderStatus('${o.id}')"
-        >
-          저장
-        </button>
-      </td>
-
-    </tr>
-  `;
-
-}).join("");
-
-    // ✅ 너가 빠뜨렸던 핵심: loadOrders 정의
     async function loadOrders(){
       const tbody = document.getElementById("ordersTbody");
       if(!tbody) return;
 
-      tbody.innerHTML = `<tr><td colspan="6" style="color:var(--muted);">불러오는 중…</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="11" style="color:var(--muted);">불러오는 중…</td></tr>`;
 
       const { data, error } = await sb
         .from("orders")
@@ -1176,7 +1161,7 @@ artistCancelBtn?.addEventListener("click", ()=>{ clearArtistForm(); setArtistMsg
         .order("created_at", { ascending:false });
 
       if(error){
-        tbody.innerHTML = `<tr><td colspan="6" style="color:var(--muted);">orders 조회 실패: ${escapeHtml(error.message)}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="11" style="color:var(--muted);">orders 조회 실패: ${escapeHtml(error.message)}</td></tr>`;
         ordersData = [];
         return;
       }
@@ -1184,35 +1169,34 @@ artistCancelBtn?.addEventListener("click", ()=>{ clearArtistForm(); setArtistMsg
       ordersData = data || [];
       renderOrders(ordersData);
     }
+
     async function saveOrderStatus(orderId){
-  try{
-    setStatus("주문 상태 변경 중…");
+      try{
+        setStatus("주문 상태 변경 중…");
 
-    const sel = document.querySelector(`[data-order-status="${orderId}"]`);
-    const nextStatus = sel?.value || "pending";
+        const sel = document.querySelector(`[data-order-status="${orderId}"]`);
+        const nextStatus = sel?.value || "pending";
 
-    const { error } = await sb
-      .from("orders")
-      .update({ status: nextStatus })
-      .eq("id", orderId);
+        const { error } = await sb
+          .from("orders")
+          .update({ status: nextStatus })
+          .eq("id", orderId);
 
-    if(error){
-      alert("상태 변경 실패: " + error.message);
-      setStatus("❌ 상태 변경 실패");
-      return;
+        if(error){
+          alert("상태 변경 실패: " + error.message);
+          setStatus("❌ 상태 변경 실패");
+          return;
+        }
+
+        setStatus("✅ 상태 변경 완료");
+        await loadOrders();
+      }catch(e){
+        console.error(e);
+        alert("예외: " + (e?.message || e));
+        setStatus("❌ 예외 발생");
+      }
     }
-
-    setStatus("✅ 상태 변경 완료");
-    // 화면 최신화
-    await loadOrders();
-  }catch(e){
-    console.error(e);
-    alert("예외: " + (e?.message || e));
-    setStatus("❌ 예외 발생");
-  }
-}
-window.saveOrderStatus = saveOrderStatus;
-    
+    window.saveOrderStatus = saveOrderStatus;
 
     // ---------- CSV / Logout ----------
     function exportCsv(){
@@ -1242,6 +1226,7 @@ window.saveOrderStatus = saveOrderStatus;
       location.href = "login.html";
     }
 
+    // ---------- Boot ----------
     window.addEventListener("DOMContentLoaded", async () => {
       if(!sb){
         setStatus("❌ supabaseClient 없음 (supabase-client.js 로드/순서 확인)");
@@ -1249,16 +1234,13 @@ window.saveOrderStatus = saveOrderStatus;
         return;
       }
 
-      // 모바일 메뉴
       document.getElementById("menuBtn")?.addEventListener("click", openSidebar);
       overlay?.addEventListener("click", closeSidebar);
 
-      // 메뉴 클릭
       document.querySelectorAll(".navItem").forEach(btn=>{
         btn.addEventListener("click", ()=> switchView(btn.dataset.view));
       });
 
-      // 툴바 이벤트
       document.getElementById("searchInput")?.addEventListener("input", ()=> renderList(auditionData));
       document.getElementById("filterPosition")?.addEventListener("change", ()=> renderList(auditionData));
       document.getElementById("refreshBtn")?.addEventListener("click", loadApplicants);
@@ -1304,7 +1286,7 @@ window.saveOrderStatus = saveOrderStatus;
         return;
       }
 
-      // 초기 로드(들어오자마자 바로 보이게)
+      // 초기 로드
       setStatus("데이터 불러오는 중…");
       await loadApplicants();
       setStatus(`지원자 ${auditionData.length}명`);
